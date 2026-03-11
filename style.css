@@ -1,0 +1,542 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    animation: gradientBG 15s ease infinite;
+    background-size: 400% 400%;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 30px;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Header Styles */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+    border-radius: 20px;
+    color: white;
+    animation: headerPulse 2s infinite;
+}
+
+@keyframes headerPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+#logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid white;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#logo:hover {
+    transform: scale(1.1) rotate(360deg);
+}
+
+.header h1 {
+    font-size: 2em;
+    margin: 10px 0 5px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+/* Current Time Card */
+.current-time-card {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 10px #3498db; }
+    to { box-shadow: 0 0 20px #2ecc71; }
+}
+
+.time-display {
+    font-size: 3em;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.date-display {
+    font-size: 1.2em;
+    margin-top: 5px;
+}
+
+/* Watch Selector */
+.watch-selector {
+    margin-bottom: 20px;
+}
+
+.watch-selector h3 {
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.watch-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.watch-option {
+    padding: 8px 15px;
+    background: #f0f0f0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.watch-option:hover {
+    transform: translateY(-2px);
+    background: #e0e0e0;
+}
+
+.watch-option.active {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+}
+
+/* Watch Container */
+.watch-container {
+    background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+    border-radius: 50%;
+    width: 300px;
+    height: 300px;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 20px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.1);
+    position: relative;
+    animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 20px 30px rgba(0,0,0,0.5); }
+    50% { box-shadow: 0 25px 35px rgba(102, 126, 234, 0.5); }
+    100% { box-shadow: 0 20px 30px rgba(0,0,0,0.5); }
+}
+
+.watch-face {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: white;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.watch-face.active {
+    display: flex;
+}
+
+/* Digital Watch Face */
+.digital-watch {
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
+.digital-time {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.digital-date {
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: #666;
+}
+
+.digital-steps, .digital-heart {
+    font-size: 1em;
+    margin: 5px 0;
+    color: #e74c3c;
+}
+
+.weekdays {
+    font-size: 0.8em;
+    color: #999;
+    letter-spacing: 2px;
+}
+
+/* Roman Watch Face */
+.roman-watch {
+    text-align: center;
+}
+
+.roman-time {
+    font-size: 3em;
+    color: #c0392b;
+    margin-bottom: 20px;
+}
+
+.roman-markers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+/* Modern Watch Face */
+.modern-watch {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.modern-markers {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.modern-markers .marker {
+    position: absolute;
+    font-size: 0.8em;
+    color: #333;
+}
+
+/* Position markers around the circle */
+.modern-markers .marker:nth-child(1) { top: 10px; left: 50%; transform: translateX(-50%); }
+.modern-markers .marker:nth-child(2) { top: 30px; right: 30px; }
+.modern-markers .marker:nth-child(3) { top: 50%; right: 10px; transform: translateY(-50%); }
+.modern-markers .marker:nth-child(4) { bottom: 30px; right: 30px; }
+.modern-markers .marker:nth-child(5) { bottom: 10px; left: 50%; transform: translateX(-50%); }
+.modern-markers .marker:nth-child(6) { bottom: 30px; left: 30px; }
+.modern-markers .marker:nth-child(7) { top: 50%; left: 10px; transform: translateY(-50%); }
+.modern-markers .marker:nth-child(8) { top: 30px; left: 30px; }
+.modern-markers .marker:nth-child(9) { top: 60px; right: 60px; }
+.modern-markers .marker:nth-child(10) { bottom: 60px; right: 60px; }
+.modern-markers .marker:nth-child(11) { bottom: 60px; left: 60px; }
+.modern-markers .marker:nth-child(12) { top: 60px; left: 60px; }
+
+/* Canvas for analog watch */
+#analogCanvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+/* Sections */
+.section {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.section:hover {
+    transform: translateY(-5px);
+}
+
+.section h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 5px;
+}
+
+/* Form Controls */
+.alarm-controls, .timer-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+input[type="time"], input[type="number"] {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1em;
+    flex: 1;
+    min-width: 80px;
+    transition: all 0.3s ease;
+}
+
+input[type="number"] {
+    width: 70px;
+    text-align: center;
+}
+
+input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+.timer-inputs span {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #667eea;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn.danger {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+}
+
+.btn.warning {
+    background: linear-gradient(45deg, #f39c12, #e67e22);
+}
+
+.btn.secondary {
+    background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+}
+
+.btn.info {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+}
+
+.btn.pdf-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+}
+
+.timer-buttons, .stopwatch-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.timer-display, .stopwatch-display {
+    font-size: 2.5em;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    padding: 15px;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #2ecc71;
+    border-radius: 15px;
+    margin: 15px 0;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    animation: digitalGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes digitalGlow {
+    from { text-shadow: 0 0 5px #2ecc71; }
+    to { text-shadow: 0 0 20px #2ecc71; }
+}
+
+/* Alarm Status */
+.alarm-status {
+    padding: 10px;
+    background: #fff;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 500;
+    color: #333;
+    margin-top: 10px;
+}
+
+/* Lap Times */
+.lap-times {
+    max-height: 100px;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 10px;
+}
+
+/* Stats Section */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    text-align: center;
+}
+
+.stats div {
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    font-weight: 500;
+}
+
+.stats span {
+    display: block;
+    font-size: 1.5em;
+    color: #667eea;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .watch-container {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .watch-face {
+        width: 210px;
+        height: 210px;
+        top: 20px;
+        left: 20px;
+    }
+    
+    .time-display {
+        font-size: 2.5em;
+    }
+    
+    .timer-display, .stopwatch-display {
+        font-size: 2em;
+    }
+    
+    .btn {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+}
+
+/* Loading Animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #764ba2, #667eea);
+}
