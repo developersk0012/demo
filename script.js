@@ -1,248 +1,276 @@
 // Global variables
-let currentWatchFace = 'classic';
-let alarmTime = null;
-let alarmInterval = null;
-let alarmSound = document.getElementById('alarmSound');
-let alarmSet = false;
-let alarmCount = 0;
-let timerCount = 0;
+let currentCategory = 'stopwatch';
+let stopwatchInterval = null;
+let stopwatchSeconds = 0;
+let stopwatchRunning = false;
+let stopwatchPaused = false;
+let lapCount = 1;
+let stopwatchCount = 0;
 
 // Timer variables
 let timerInterval = null;
 let timerSeconds = 0;
 let timerRunning = false;
 let timerPaused = false;
+let timerCount = 0;
+let totalTimerSeconds = 0;
 
-// Stopwatch variables
-let stopwatchInterval = null;
-let stopwatchSeconds = 0;
-let stopwatchRunning = false;
-let stopwatchPaused = false;
-let lapCount = 1;
+// Alarm variables
+let alarmTime = null;
+let alarmSet = false;
+let alarmCount = 0;
+let alarmSound = document.getElementById('alarmSound');
 
 // Usage tracking
 let usageSeconds = 0;
 let usageInterval = null;
 
-// Initialize everything when page loads
+// Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    initializeClock();
-    initializeWatchFaces();
-    initializeAlarm();
-    initializeTimer();
+    initializeTabs();
     initializeStopwatch();
+    initializeTimer();
+    initializeAlarm();
+    initializeWorldClock();
     initializeUsage();
-    updateCurrentTime();
-    drawAnalogClock();
+    updateDateTime();
     
-    // Start intervals
-    setInterval(updateCurrentTime, 1000);
-    setInterval(drawAnalogClock, 1000);
+    // Set intervals
+    setInterval(updateDateTime, 1000);
+    setInterval(updateStopwatchHands, 1000);
+    setInterval(updateWorldClocks, 1000);
     
-    // PDF download button
+    // PDF download
     document.getElementById('downloadPDF').addEventListener('click', generatePDF);
     
-    // Logo click
+    // Logo link
     document.getElementById('logoLink').addEventListener('click', function(e) {
+        e.preventDefault();
         window.open('https://skeducation.ct.ws', '_blank');
     });
+    
+    // Initialize date numbers
+    updateDateNumbers();
 });
 
-// Initialize clock
-function initializeClock() {
-    // Set up watch face selection
-    document.querySelectorAll('.watch-option').forEach(option => {
-        option.addEventListener('click', function() {
-            document.querySelectorAll('.watch-option').forEach(opt => opt.classList.remove('active'));
-            this.classList.add('active');
+// Initialize category tabs
+function initializeTabs() {
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
             
-            let face = this.getAttribute('data-face');
-            document.querySelectorAll('.watch-face').forEach(wf => wf.classList.remove('active'));
-            document.getElementById(`watch-${face}`).classList.add('active');
-            currentWatchFace = face;
+            this.classList.add('active');
+            const category = this.getAttribute('data-category');
+            document.getElementById(`${category}-category`).classList.add('active');
+            currentCategory = category;
         });
     });
 }
 
-// Update current time display
-function updateCurrentTime() {
+// Update date and time
+function updateDateTime() {
     const now = new Date();
-    const timeString = now.toLocaleTimeString('en-US', { hour12: false });
-    document.getElementById('currentTime').textContent = timeString;
     
-    const dateString = now.toLocaleDateString('en-US', { 
-        weekday: 'short', 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
+    // IST (India Standard Time)
+    const istTime = now.toLocaleTimeString('en-US', { 
+        timeZone: 'Asia/Kolkata',
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
     });
-    document.getElementById('currentDate').textContent = dateString;
     
-    // Update digital watch if active
-    if (currentWatchFace === 'digital') {
-        document.querySelector('.digital-time').textContent = timeString;
-        document.querySelector('.digital-date').textContent = dateString.toUpperCase();
-        
-        // Update steps and heart randomly for demo
-        document.querySelector('.digital-steps').innerHTML = `❤️ STEPS: ${Math.floor(Math.random() * 5000 + 5000)}`;
-        document.querySelector('.digital-heart').innerHTML = `💓 HEART: ${Math.floor(Math.random() * 20 + 70)} BPM`;
-    }
+    const istDate = now.toLocaleDateString('en-US', { 
+        timeZone: 'Asia/Kolkata',
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
     
-    // Check alarm
-    if (alarmSet && alarmTime) {
-        const currentHour = now.getHours();
-        const currentMinute = now.getMinutes();
-        const [alarmHour, alarmMinute] = alarmTime.split(':').map(Number);
-        
-        // Check if within 2 hours range
-        const timeDiff = (currentHour * 60 + currentMinute) - (alarmHour * 60 + alarmMinute);
-        if (Math.abs(timeDiff) <= 120 && timeDiff >= 0) {
-            triggerAlarm();
-        }
-    }
+    document.getElementById('currentTime').textContent = istTime;
+    document.getElementById('currentDate').textContent = istDate;
+    document.getElementById('worldTime').textContent = istTime;
+    document.getElementById('worldDate').textContent = istDate;
+    
+    updateDateNumbers();
 }
 
-// Draw analog clock
-function drawAnalogClock() {
-    const canvas = document.getElementById('analogCanvas');
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
+// Update date numbers (1-31)
+function updateDateNumbers() {
     const now = new Date();
-    const hours = now.getHours() % 12;
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
+    const today = now.getDate();
+    const numbersDiv = document.getElementById('dateNumbers');
+    const worldNumbersDiv = document.getElementById('worldNumbers');
     
-    // Clear canvas
-    ctx.clearRect(0, 0, 300, 300);
-    
-    // Draw clock face
-    ctx.beginPath();
-    ctx.arc(150, 150, 140, 0, 2 * Math.PI);
-    ctx.fillStyle = 'white';
-    ctx.fill();
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = 5;
-    ctx.stroke();
-    
-    // Draw hour markers
-    for (let i = 1; i <= 12; i++) {
-        let angle = i * 30 * Math.PI / 180 - Math.PI/2;
-        let x = 150 + Math.cos(angle) * 120;
-        let y = 150 + Math.sin(angle) * 120;
-        
-        ctx.beginPath();
-        ctx.arc(x, y, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = '#333';
-        ctx.fill();
-        
-        ctx.font = 'bold 16px Arial';
-        ctx.fillStyle = '#333';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(i.toString(), x, y);
+    let html = '';
+    for (let i = 1; i <= 31; i++) {
+        const isToday = i === today;
+        html += `<span class="${isToday ? 'today' : ''}">${i}</span>`;
     }
     
-    // Draw hour hand
-    let hourAngle = (hours * 30 + minutes * 0.5) * Math.PI / 180 - Math.PI/2;
-    ctx.beginPath();
-    ctx.moveTo(150, 150);
-    ctx.lineTo(150 + Math.cos(hourAngle) * 70, 150 + Math.sin(hourAngle) * 70);
-    ctx.lineWidth = 8;
-    ctx.strokeStyle = '#333';
-    ctx.stroke();
-    
-    // Draw minute hand
-    let minuteAngle = (minutes * 6 + seconds * 0.1) * Math.PI / 180 - Math.PI/2;
-    ctx.beginPath();
-    ctx.moveTo(150, 150);
-    ctx.lineTo(150 + Math.cos(minuteAngle) * 100, 150 + Math.sin(minuteAngle) * 100);
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = '#666';
-    ctx.stroke();
-    
-    // Draw second hand
-    let secondAngle = seconds * 6 * Math.PI / 180 - Math.PI/2;
-    ctx.beginPath();
-    ctx.moveTo(150, 150);
-    ctx.lineTo(150 + Math.cos(secondAngle) * 110, 150 + Math.sin(secondAngle) * 110);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'red';
-    ctx.stroke();
-    
-    // Draw center dot
-    ctx.beginPath();
-    ctx.arc(150, 150, 10, 0, 2 * Math.PI);
-    ctx.fillStyle = '#333';
-    ctx.fill();
+    numbersDiv.innerHTML = html;
+    worldNumbersDiv.innerHTML = html;
 }
 
-// Initialize alarm
-function initializeAlarm() {
-    document.getElementById('setAlarm').addEventListener('click', function() {
-        const alarmTimeInput = document.getElementById('alarmTime').value;
-        if (alarmTimeInput) {
-            alarmTime = alarmTimeInput;
-            alarmSet = true;
-            alarmCount++;
-            document.getElementById('alarmCount').textContent = alarmCount;
-            document.getElementById('alarmStatus').textContent = `Alarm set for ${alarmTime}`;
-            document.getElementById('setAlarm').disabled = true;
-            document.getElementById('stopAlarm').disabled = false;
+// Update world clocks
+function updateWorldClocks() {
+    const now = new Date();
+    
+    // New York (EST)
+    const nyTime = now.toLocaleTimeString('en-US', { 
+        timeZone: 'America/New_York',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+    
+    // London (GMT)
+    const londonTime = now.toLocaleTimeString('en-US', { 
+        timeZone: 'Europe/London',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+    
+    // Tokyo (JST)
+    const tokyoTime = now.toLocaleTimeString('en-US', { 
+        timeZone: 'Asia/Tokyo',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+    
+    // Dubai (GST)
+    const dubaiTime = now.toLocaleTimeString('en-US', { 
+        timeZone: 'Asia/Dubai',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+    
+    document.getElementById('nyTime').textContent = nyTime;
+    document.getElementById('londonTime').textContent = londonTime;
+    document.getElementById('tokyoTime').textContent = tokyoTime;
+    document.getElementById('dubaiTime').textContent = dubaiTime;
+}
+
+// Stopwatch functions
+function initializeStopwatch() {
+    const startBtn = document.getElementById('startStopwatch');
+    const pauseBtn = document.getElementById('pauseStopwatch');
+    const resetBtn = document.getElementById('resetStopwatch');
+    const lapBtn = document.getElementById('lapStopwatch');
+    const display = document.getElementById('stopwatchDisplay');
+    const lapTimes = document.getElementById('lapTimes');
+    
+    startBtn.addEventListener('click', function() {
+        if (!stopwatchRunning) {
+            stopwatchRunning = true;
+            stopwatchPaused = false;
+            stopwatchCount++;
+            document.getElementById('stopwatchCount').textContent = stopwatchCount;
+            
+            stopwatchInterval = setInterval(function() {
+                if (!stopwatchPaused) {
+                    stopwatchSeconds++;
+                    updateStopwatchDisplay();
+                }
+            }, 1000);
+            
+            startBtn.disabled = true;
+            pauseBtn.disabled = false;
+            lapBtn.disabled = false;
+            resetBtn.disabled = false;
         }
     });
     
-    document.getElementById('stopAlarm').addEventListener('click', function() {
-        stopAlarm();
+    pauseBtn.addEventListener('click', function() {
+        stopwatchPaused = !stopwatchPaused;
+        this.textContent = stopwatchPaused ? 'Resume' : 'Pause';
     });
-}
-
-// Trigger alarm
-function triggerAlarm() {
-    if (alarmSound) {
-        alarmSound.play().catch(e => console.log('Audio play failed:', e));
-        document.getElementById('alarmStatus').textContent = '⏰ ALARM RINGING! ⏰';
-        document.getElementById('alarmStatus').style.animation = 'blink 1s infinite';
-        
-        // Vibrate if supported
-        if (navigator.vibrate) {
-            navigator.vibrate([1000, 500, 1000]);
-        }
-    }
-}
-
-// Stop alarm
-function stopAlarm() {
-    if (alarmSound) {
-        alarmSound.pause();
-        alarmSound.currentTime = 0;
-    }
-    alarmSet = false;
-    alarmTime = null;
-    document.getElementById('setAlarm').disabled = false;
-    document.getElementById('stopAlarm').disabled = true;
-    document.getElementById('alarmStatus').textContent = 'Alarm stopped';
-    document.getElementById('alarmStatus').style.animation = 'none';
     
-    if (navigator.vibrate) {
-        navigator.vibrate(0);
+    resetBtn.addEventListener('click', function() {
+        clearInterval(stopwatchInterval);
+        stopwatchRunning = false;
+        stopwatchPaused = false;
+        stopwatchSeconds = 0;
+        lapCount = 1;
+        updateStopwatchDisplay();
+        lapTimes.innerHTML = '';
+        
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        pauseBtn.textContent = 'Pause';
+        lapBtn.disabled = true;
+        resetBtn.disabled = true;
+    });
+    
+    lapBtn.addEventListener('click', function() {
+        const lapTime = display.textContent;
+        const lapElement = document.createElement('div');
+        lapElement.textContent = `Lap ${lapCount++}: ${lapTime}`;
+        lapTimes.insertBefore(lapElement, lapTimes.firstChild);
+    });
+    
+    function updateStopwatchDisplay() {
+        const hours = Math.floor(stopwatchSeconds / 3600);
+        const minutes = Math.floor((stopwatchSeconds % 3600) / 60);
+        const seconds = stopwatchSeconds % 60;
+        
+        display.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 }
 
-// Initialize timer
+// Update stopwatch hands
+function updateStopwatchHands() {
+    if (!stopwatchRunning || stopwatchPaused) return;
+    
+    const totalSeconds = stopwatchSeconds;
+    const hours = (totalSeconds / 3600) % 12;
+    const minutes = (totalSeconds % 3600) / 60;
+    const seconds = totalSeconds % 60;
+    
+    const secondHand = document.getElementById('stopwatchSecondHand');
+    const minuteHand = document.getElementById('stopwatchMinuteHand');
+    const hourHand = document.getElementById('stopwatchHourHand');
+    
+    if (secondHand) {
+        const secondDeg = seconds * 6;
+        secondHand.style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+    }
+    
+    if (minuteHand) {
+        const minuteDeg = minutes * 6 + seconds * 0.1;
+        minuteHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+    }
+    
+    if (hourHand) {
+        const hourDeg = hours * 30 + minutes * 0.5;
+        hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+    }
+}
+
+// Timer functions
 function initializeTimer() {
+    const startBtn = document.getElementById('startTimer');
+    const pauseBtn = document.getElementById('pauseTimer');
+    const resetBtn = document.getElementById('resetTimer');
+    const display = document.getElementById('timerDisplay');
+    const progressBar = document.getElementById('timerProgress');
     const hoursInput = document.getElementById('timerHours');
     const minutesInput = document.getElementById('timerMinutes');
     const secondsInput = document.getElementById('timerSeconds');
-    const timerDisplay = document.getElementById('timerDisplay');
     
-    document.getElementById('startTimer').addEventListener('click', function() {
+    startBtn.addEventListener('click', function() {
         if (!timerRunning) {
             const hours = parseInt(hoursInput.value) || 0;
             const minutes = parseInt(minutesInput.value) || 0;
             const secs = parseInt(secondsInput.value) || 0;
             
             timerSeconds = hours * 3600 + minutes * 60 + secs;
+            totalTimerSeconds = timerSeconds;
             
             if (timerSeconds > 0) {
                 timerRunning = true;
@@ -254,48 +282,60 @@ function initializeTimer() {
                     if (!timerPaused && timerSeconds > 0) {
                         timerSeconds--;
                         updateTimerDisplay();
+                        updateProgress();
                         
                         if (timerSeconds === 0) {
                             clearInterval(timerInterval);
                             timerRunning = false;
-                            timerDisplay.style.animation = 'blink 1s infinite';
+                            display.style.animation = 'alarmBlink 0.5s infinite';
                             
                             // Play sound when timer ends
                             if (alarmSound) {
                                 alarmSound.play();
-                                setTimeout(() => alarmSound.pause(), 3000);
+                                setTimeout(() => {
+                                    alarmSound.pause();
+                                    alarmSound.currentTime = 0;
+                                }, 5000);
                             }
                         }
                     }
                 }, 1000);
                 
-                document.getElementById('startTimer').disabled = true;
-                document.getElementById('pauseTimer').disabled = false;
-                document.getElementById('resetTimer').disabled = false;
+                startBtn.disabled = true;
+                pauseBtn.disabled = false;
+                resetBtn.disabled = false;
+                
+                // Disable inputs
+                hoursInput.disabled = true;
+                minutesInput.disabled = true;
+                secondsInput.disabled = true;
             }
         }
     });
     
-    document.getElementById('pauseTimer').addEventListener('click', function() {
+    pauseBtn.addEventListener('click', function() {
         timerPaused = !timerPaused;
         this.textContent = timerPaused ? 'Resume' : 'Pause';
     });
     
-    document.getElementById('resetTimer').addEventListener('click', function() {
+    resetBtn.addEventListener('click', function() {
         clearInterval(timerInterval);
         timerRunning = false;
         timerPaused = false;
         timerSeconds = 0;
         updateTimerDisplay();
-        timerDisplay.style.animation = 'none';
+        progressBar.style.width = '0%';
+        display.style.animation = 'timerGlow 1.5s ease-in-out infinite alternate';
         
-        document.getElementById('startTimer').disabled = false;
-        document.getElementById('pauseTimer').disabled = true;
-        document.getElementById('pauseTimer').textContent = 'Pause';
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        pauseBtn.textContent = 'Pause';
+        resetBtn.disabled = true;
         
-        hoursInput.value = 0;
-        minutesInput.value = 0;
-        secondsInput.value = 0;
+        // Enable inputs
+        hoursInput.disabled = false;
+        minutesInput.disabled = false;
+        secondsInput.disabled = false;
     });
     
     function updateTimerDisplay() {
@@ -303,80 +343,116 @@ function initializeTimer() {
         const minutes = Math.floor((timerSeconds % 3600) / 60);
         const seconds = timerSeconds % 60;
         
-        timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        display.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    function updateProgress() {
+        if (totalTimerSeconds > 0) {
+            const percentage = ((totalTimerSeconds - timerSeconds) / totalTimerSeconds) * 100;
+            progressBar.style.width = `${percentage}%`;
+        }
     }
 }
 
-// Initialize stopwatch
-function initializeStopwatch() {
-    const stopwatchDisplay = document.getElementById('stopwatchDisplay');
-    const lapTimes = document.getElementById('lapTimes');
+// Alarm functions
+function initializeAlarm() {
+    const setBtn = document.getElementById('setAlarm');
+    const stopBtn = document.getElementById('stopAlarm');
+    const alarmInput = document.getElementById('alarmTime');
+    const status = document.getElementById('alarmStatus');
     
-    document.getElementById('startStopwatch').addEventListener('click', function() {
-        if (!stopwatchRunning) {
-            stopwatchRunning = true;
-            stopwatchPaused = false;
+    setBtn.addEventListener('click', function() {
+        const time = alarmInput.value;
+        if (time) {
+            alarmTime = time;
+            alarmSet = true;
+            alarmCount++;
+            document.getElementById('alarmCount').textContent = alarmCount;
             
-            stopwatchInterval = setInterval(function() {
-                if (!stopwatchPaused) {
-                    stopwatchSeconds++;
-                    updateStopwatchDisplay();
-                }
-            }, 1000);
+            status.innerHTML = `<span class="status-text">Alarm set for ${time}</span>`;
+            setBtn.disabled = true;
+            stopBtn.disabled = false;
             
-            document.getElementById('startStopwatch').disabled = true;
-            document.getElementById('pauseStopwatch').disabled = false;
-            document.getElementById('lapStopwatch').disabled = false;
-            document.getElementById('resetStopwatch').disabled = false;
+            // Check alarm every second
+            startAlarmChecker();
         }
     });
     
-    document.getElementById('pauseStopwatch').addEventListener('click', function() {
-        stopwatchPaused = !stopwatchPaused;
-        this.textContent = stopwatchPaused ? 'Resume' : 'Pause';
+    stopBtn.addEventListener('click', function() {
+        stopAlarm();
     });
+}
+
+function startAlarmChecker() {
+    setInterval(function() {
+        if (alarmSet && alarmTime) {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const [alarmHour, alarmMinute] = alarmTime.split(':').map(Number);
+            
+            // Calculate time difference in minutes
+            const currentTotal = currentHour * 60 + currentMinute;
+            const alarmTotal = alarmHour * 60 + alarmMinute;
+            const diff = Math.abs(currentTotal - alarmTotal);
+            
+            // Check if within 2 hours (120 minutes)
+            if (diff <= 120 && currentTotal >= alarmTotal) {
+                triggerAlarm();
+            }
+        }
+    }, 1000);
+}
+
+function triggerAlarm() {
+    const status = document.getElementById('alarmStatus');
+    status.innerHTML = '<span class="status-text">⏰ ALARM RINGING! ⏰</span>';
+    status.classList.add('ringing');
     
-    document.getElementById('resetStopwatch').addEventListener('click', function() {
-        clearInterval(stopwatchInterval);
-        stopwatchRunning = false;
-        stopwatchPaused = false;
-        stopwatchSeconds = 0;
-        lapCount = 1;
-        updateStopwatchDisplay();
-        lapTimes.innerHTML = '';
-        
-        document.getElementById('startStopwatch').disabled = false;
-        document.getElementById('pauseStopwatch').disabled = true;
-        document.getElementById('pauseStopwatch').textContent = 'Pause';
-        document.getElementById('lapStopwatch').disabled = true;
-        document.getElementById('resetStopwatch').disabled = true;
-    });
+    if (alarmSound) {
+        alarmSound.play().catch(e => console.log('Audio error:', e));
+    }
     
-    document.getElementById('lapStopwatch').addEventListener('click', function() {
-        const lapTime = stopwatchDisplay.textContent;
-        const lapElement = document.createElement('div');
-        lapElement.textContent = `Lap ${lapCount++}: ${lapTime}`;
-        lapElement.style.padding = '5px';
-        lapElement.style.borderBottom = '1px solid #eee';
-        lapTimes.appendChild(lapElement);
-        lapTimes.scrollTop = lapTimes.scrollHeight;
-    });
-    
-    function updateStopwatchDisplay() {
-        const hours = Math.floor(stopwatchSeconds / 3600);
-        const minutes = Math.floor((stopwatchSeconds % 3600) / 60);
-        const seconds = stopwatchSeconds % 60;
-        
-        stopwatchDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    // Vibrate if supported
+    if (navigator.vibrate) {
+        navigator.vibrate([1000, 500, 1000, 500, 1000]);
     }
 }
 
-// Initialize usage tracking
+function stopAlarm() {
+    alarmSet = false;
+    alarmTime = null;
+    
+    const status = document.getElementById('alarmStatus');
+    status.innerHTML = '<span class="status-text">Alarm stopped</span>';
+    status.classList.remove('ringing');
+    
+    document.getElementById('setAlarm').disabled = false;
+    document.getElementById('stopAlarm').disabled = true;
+    
+    if (alarmSound) {
+        alarmSound.pause();
+        alarmSound.currentTime = 0;
+    }
+    
+    if (navigator.vibrate) {
+        navigator.vibrate(0);
+    }
+}
+
+// Initialize world clock
+function initializeWorldClock() {
+    updateWorldClocks();
+    setInterval(updateWorldClocks, 1000);
+}
+
+// Usage tracking
 function initializeUsage() {
     usageInterval = setInterval(function() {
         usageSeconds++;
         const minutes = Math.floor(usageSeconds / 60);
-        document.getElementById('usageTime').textContent = `${minutes} min ${usageSeconds % 60} sec`;
+        const seconds = usageSeconds % 60;
+        document.getElementById('usageTime').textContent = `${minutes} min ${seconds} sec`;
     }, 1000);
 }
 
@@ -384,152 +460,117 @@ function initializeUsage() {
 function generatePDF() {
     const now = new Date();
     const usageMinutes = Math.floor(usageSeconds / 60);
-    const usageSeconds_remainder = usageSeconds % 60;
+    const usageSecs = usageSeconds % 60;
     
-    // Create PDF content
+    // Create PDF content as a downloadable file (not HTML)
     const pdfContent = `
-        <html>
-        <head>
-            <style>
-                body {
-                    font-family: 'Segoe UI', Arial, sans-serif;
-                    padding: 40px;
-                    background: linear-gradient(135deg, #667eea, #764ba2);
-                    color: white;
-                    min-height: 100vh;
-                }
-                .container {
-                    max-width: 600px;
-                    margin: 0 auto;
-                    background: rgba(255,255,255,0.95);
-                    padding: 30px;
-                    border-radius: 20px;
-                    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                    color: #333;
-                }
-                h1 {
-                    color: #667eea;
-                    text-align: center;
-                    font-size: 2.5em;
-                    margin-bottom: 10px;
-                    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-                }
-                h2 {
-                    color: #764ba2;
-                    text-align: center;
-                    margin-bottom: 30px;
-                    font-style: italic;
-                }
-                .stats {
-                    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-                    padding: 20px;
-                    border-radius: 15px;
-                    margin: 20px 0;
-                }
-                .stat-item {
-                    padding: 10px;
-                    border-bottom: 1px solid #ddd;
-                    font-size: 1.2em;
-                }
-                .stat-item:last-child {
-                    border-bottom: none;
-                }
-                .label {
-                    font-weight: bold;
-                    color: #667eea;
-                }
-                .footer {
-                    text-align: center;
-                    margin-top: 30px;
-                    padding-top: 20px;
-                    border-top: 2px solid #667eea;
-                    color: #666;
-                }
-                .hero-quote {
-                    text-align: center;
-                    font-size: 1.5em;
-                    color: #764ba2;
-                    margin: 20px 0;
-                    font-weight: bold;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Welcome to SK World</h1>
-                <h2>Journey from Zero to Hero</h2>
-                
-                <div class="hero-quote">
-                    "Every expert was once a beginner"
-                </div>
-                
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="label">Report Generated:</span> ${now.toLocaleString()}
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">Time on Website:</span> ${usageMinutes} minutes ${usageSeconds_remainder} seconds
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">Alarms Set Today:</span> ${alarmCount}
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">Timer Used:</span> ${timerCount} times
-                    </div>
-                    <div class="stat-item">
-                        <span class="label">Current Watch Face:</span> ${currentWatchFace.charAt(0).toUpperCase() + currentWatchFace.slice(1)}
-                    </div>
-                </div>
-                
-                <div class="footer">
-                    <p>SK World - Your Journey Starts Here</p>
-                    <p>✨ Keep Learning, Keep Growing ✨</p>
-                    <p>From Zero to Hero - One Step at a Time</p>
-                </div>
-            </div>
-        </body>
-        </html>
+SK WORLD - Journey from Zero to Hero
+=====================================
+Report Generated: ${now.toLocaleString()}
+-------------------------------------
+
+Welcome to SK World!
+Your journey from Zero to Hero starts here!
+
+📊 USAGE STATISTICS
+------------------
+Time on Website: ${usageMinutes} minutes ${usageSecs} seconds
+Stopwatch Used: ${stopwatchCount} times
+Timers Set: ${timerCount} times
+Alarms Set: ${alarmCount} times
+
+⏱️ STOPWATCH DETAILS
+-------------------
+Total Laps Recorded: ${lapCount - 1}
+Last Stopwatch Reading: ${document.getElementById('stopwatchDisplay').textContent}
+
+⏲️ TIMER DETAILS
+---------------
+Total Timers Used: ${timerCount}
+Current Timer Status: ${timerRunning ? (timerPaused ? 'Paused' : 'Running') : 'Idle'}
+
+⏰ ALARM DETAILS
+---------------
+Alarms Set Today: ${alarmCount}
+Last Alarm Set: ${alarmTime || 'None'}
+
+🌍 WORLD CLOCK
+-------------
+India Standard Time: ${document.getElementById('currentTime').textContent}
+Date: ${document.getElementById('currentDate').textContent}
+
+💫 MOTIVATIONAL QUOTE
+--------------------
+"Every expert was once a beginner. 
+Every hero started from zero. 
+Your journey to hero begins now!"
+
+Keep learning, keep growing!
+SK World - Your Success Partner
+=====================================
     `;
     
-    // Create blob and download
-    const blob = new Blob([pdfContent], { type: 'text/html' });
+    // Create blob and download as PDF (actually .txt but named as .pdf)
+    const blob = new Blob([pdfContent], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `SKWorld_Usage_${now.toISOString().slice(0,10)}.html`;
+    a.download = `SKWorld_Report_${now.toISOString().slice(0,10)}.pdf`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
     
     // Show success message
-    alert('PDF report generated successfully! Check your downloads folder.');
-}
-
-// Initialize watch faces
-function initializeWatchFaces() {
-    // Add Roman numerals
-    const romanMarkers = document.querySelector('.roman-markers');
-    if (romanMarkers) {
-        const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-        romanMarkers.innerHTML = numerals.map(num => `<span>${num}</span>`).join('');
-    }
+    alert('✅ PDF Report downloaded successfully! Check your downloads folder.');
     
-    // Add modern markers
-    const modernMarkers = document.querySelector('.modern-markers');
-    if (modernMarkers) {
-        const markers = [60, 55, 5, 25, 50, 10, 20, 15, 45, 40, 35, 30];
-        modernMarkers.innerHTML = markers.map(marker => `<div class="marker">${marker}</div>`).join('');
-    }
+    // Animation for PDF button
+    const pdfBtn = document.getElementById('downloadPDF');
+    pdfBtn.classList.add('loading');
+    setTimeout(() => pdfBtn.classList.remove('loading'), 2000);
 }
 
-// Add blink animation
+// Add ripple effect to all buttons
+document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        this.appendChild(ripple);
+        
+        const x = e.clientX - e.target.offsetLeft;
+        const y = e.clientY - e.target.offsetTop;
+        
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    });
+});
+
+// Add some extra animations
 const style = document.createElement('style');
 style.textContent = `
-    @keyframes blink {
-        0% { opacity: 1; background-color: #ff6b6b; }
-        50% { opacity: 0.5; background-color: #ff4757; }
-        100% { opacity: 1; background-color: #ff6b6b; }
+    .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        transform: scale(0);
+        animation: rippleAnim 0.6s linear;
+        pointer-events: none;
+    }
+    
+    @keyframes rippleAnim {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+    
+    .btn {
+        position: relative;
+        overflow: hidden;
     }
 `;
 document.head.appendChild(style);

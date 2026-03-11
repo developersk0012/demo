@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SK World - Journey Zero to Hero</title>
+    <title>SK World - Zero to Hero</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,126 +19,184 @@
 
         <!-- Current Time Display -->
         <div class="current-time-card">
-            <div class="time-display" id="currentTime">--:--:--</div>
-            <div class="date-display" id="currentDate">---, -- --- ----</div>
-        </div>
-
-        <!-- Watch Face Selection -->
-        <div class="watch-selector">
-            <h3>Choose Your Watch Face</h3>
-            <div class="watch-options">
-                <div class="watch-option active" data-face="classic">Classic</div>
-                <div class="watch-option" data-face="digital">Digital</div>
-                <div class="watch-option" data-face="roman">Roman</div>
-                <div class="watch-option" data-face="modern">Modern</div>
-            </div>
-        </div>
-
-        <!-- Watch Display -->
-        <div class="watch-container">
-            <!-- Classic Watch Face (Analog with numbers) -->
-            <div class="watch-face active" id="watch-classic">
-                <canvas id="analogCanvas" width="300" height="300"></canvas>
-            </div>
-            
-            <!-- Digital Watch Face -->
-            <div class="watch-face" id="watch-digital">
-                <div class="digital-watch">
-                    <div class="digital-time">12:00:00</div>
-                    <div class="digital-date">MON 01 JAN</div>
-                    <div class="digital-steps">❤️ STEPS: 7,892</div>
-                    <div class="digital-heart">💓 HEART: 72 BPM</div>
-                    <div class="weekdays">SU MO TU WE TH FR SA</div>
+            <div class="world-clock">
+                <h3>🌍 World Clock - India Standard Time</h3>
+                <div class="time-display" id="currentTime">--:--:--</div>
+                <div class="date-display" id="currentDate">---, -- --- ----</div>
+                <div class="date-numbers" id="dateNumbers">
+                    <!-- Numbers 1-31 will be inserted via JS -->
                 </div>
             </div>
-            
-            <!-- Roman Numerals Watch Face -->
-            <div class="watch-face" id="watch-roman">
-                <div class="roman-watch">
-                    <div class="roman-time">XII</div>
-                    <div class="roman-markers">
-                        <span>I</span><span>II</span><span>III</span><span>IV</span><span>V</span><span>VI</span><span>VII</span><span>VIII</span>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <div class="tab active" data-category="stopwatch">⏱️ Stopwatch</div>
+            <div class="tab" data-category="timer">⏲️ Timer</div>
+            <div class="tab" data-category="alarm">⏰ Alarm</div>
+            <div class="tab" data-category="world">🌍 World Clock</div>
+        </div>
+
+        <!-- Stopwatch Category -->
+        <div class="category active" id="stopwatch-category">
+            <div class="watch-container">
+                <!-- Stopwatch UI with center image -->
+                <div class="stopwatch-face">
+                    <div class="stopwatch-numbers">
+                        <span class="num num12">12</span>
+                        <span class="num num1">1</span>
+                        <span class="num num2">2</span>
+                        <span class="num num3">3</span>
+                        <span class="num num4">4</span>
+                        <span class="num num5">5</span>
+                        <span class="num num6">6</span>
+                        <span class="num num7">7</span>
+                        <span class="num num8">8</span>
+                        <span class="num num9">9</span>
+                        <span class="num num10">10</span>
+                        <span class="num num11">11</span>
                     </div>
+                    <!-- Center Image (jaan.png) -->
+                    <div class="stopwatch-center">
+                        <img src="jaan.png" alt="Center" id="centerImage" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23ff6b6b%22/><text x=%2250%22 y=%2265%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22 font-weight=%22bold%22>❤️</text></svg>'">
+                    </div>
+                    <!-- Stopwatch Hands -->
+                    <div class="hand second-hand" id="stopwatchSecondHand"></div>
+                    <div class="hand minute-hand" id="stopwatchMinuteHand"></div>
+                    <div class="hand hour-hand" id="stopwatchHourHand"></div>
                 </div>
             </div>
             
-            <!-- Modern Watch Face (Numbers with markers) -->
-            <div class="watch-face" id="watch-modern">
-                <div class="modern-watch">
-                    <div class="modern-markers">
-                        <div class="marker">60</div>
-                        <div class="marker">55</div>
-                        <div class="marker">5</div>
-                        <div class="marker">25</div>
-                        <div class="marker">50</div>
-                        <div class="marker">10</div>
-                        <div class="marker">20</div>
-                        <div class="marker">15</div>
-                        <div class="marker">45</div>
-                        <div class="marker">40</div>
-                        <div class="marker">35</div>
-                        <div class="marker">30</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Alarm Section -->
-        <div class="section alarm-section">
-            <h3>⏰ Alarm (2 Hours Range)</h3>
-            <div class="alarm-controls">
-                <input type="time" id="alarmTime" value="08:00">
-                <button id="setAlarm" class="btn">Set Alarm</button>
-                <button id="stopAlarm" class="btn danger" disabled>Stop</button>
-            </div>
-            <div class="alarm-status" id="alarmStatus">Alarm not set</div>
-        </div>
-
-        <!-- Timer Section -->
-        <div class="section timer-section">
-            <h3>⏱️ Timer</h3>
-            <div class="timer-controls">
-                <div class="timer-inputs">
-                    <input type="number" id="timerHours" min="0" max="23" value="0" placeholder="HH">
-                    <span>:</span>
-                    <input type="number" id="timerMinutes" min="0" max="59" value="0" placeholder="MM">
-                    <span>:</span>
-                    <input type="number" id="timerSeconds" min="0" max="59" value="0" placeholder="SS">
-                </div>
-                <div class="timer-buttons">
-                    <button id="startTimer" class="btn">Start</button>
-                    <button id="pauseTimer" class="btn warning" disabled>Pause</button>
-                    <button id="resetTimer" class="btn secondary">Reset</button>
-                </div>
-            </div>
-            <div class="timer-display" id="timerDisplay">00:00:00</div>
-        </div>
-
-        <!-- Stopwatch Section -->
-        <div class="section stopwatch-section">
-            <h3>⏱️ Stopwatch</h3>
             <div class="stopwatch-display" id="stopwatchDisplay">00:00:00</div>
-            <div class="stopwatch-buttons">
-                <button id="startStopwatch" class="btn">Start</button>
-                <button id="pauseStopwatch" class="btn warning" disabled>Pause</button>
-                <button id="resetStopwatch" class="btn secondary">Reset</button>
-                <button id="lapStopwatch" class="btn info" disabled>Lap</button>
+            
+            <div class="stopwatch-controls">
+                <button id="startStopwatch" class="btn start">Start</button>
+                <button id="pauseStopwatch" class="btn pause" disabled>Pause</button>
+                <button id="resetStopwatch" class="btn reset">Reset</button>
+                <button id="lapStopwatch" class="btn lap" disabled>Lap</button>
             </div>
+            
             <div class="lap-times" id="lapTimes"></div>
         </div>
 
-        <!-- Usage Statistics -->
-        <div class="section stats-section">
-            <h3>📊 Today's Usage</h3>
-            <div class="stats">
-                <div>Time on site: <span id="usageTime">0 min</span></div>
-                <div>Alarms set: <span id="alarmCount">0</span></div>
-                <div>Timer used: <span id="timerCount">0</span></div>
-                <button id="downloadPDF" class="btn pdf-btn">Download Usage Report 📄</button>
+        <!-- Timer Category -->
+        <div class="category" id="timer-category">
+            <div class="timer-setup">
+                <h3>Set Timer</h3>
+                <div class="timer-input-group">
+                    <div class="input-block">
+                        <label>Hours</label>
+                        <input type="number" id="timerHours" min="0" max="23" value="0" class="timer-input">
+                    </div>
+                    <div class="input-block">
+                        <label>Minutes</label>
+                        <input type="number" id="timerMinutes" min="0" max="59" value="0" class="timer-input">
+                    </div>
+                    <div class="input-block">
+                        <label>Seconds</label>
+                        <input type="number" id="timerSeconds" min="0" max="59" value="0" class="timer-input">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timer-display" id="timerDisplay">00:00:00</div>
+            
+            <div class="timer-controls">
+                <button id="startTimer" class="btn start">Start</button>
+                <button id="pauseTimer" class="btn pause" disabled>Pause</button>
+                <button id="resetTimer" class="btn reset">Reset</button>
+            </div>
+            
+            <div class="timer-progress">
+                <div class="progress-bar" id="timerProgress"></div>
             </div>
         </div>
 
-        <!-- Audio element for alarm -->
+        <!-- Alarm Category -->
+        <div class="category" id="alarm-category">
+            <h3>⏰ Set Alarm (2 Hours Range)</h3>
+            
+            <div class="alarm-setup">
+                <div class="alarm-time-picker">
+                    <input type="time" id="alarmTime" value="08:00" class="alarm-input">
+                </div>
+                
+                <div class="alarm-controls">
+                    <button id="setAlarm" class="btn start">Set Alarm</button>
+                    <button id="stopAlarm" class="btn stop" disabled>Stop Alarm</button>
+                </div>
+                
+                <div class="alarm-status" id="alarmStatus">
+                    <span class="status-text">No alarm set</span>
+                </div>
+                
+                <div class="alarm-range-info">
+                    ⏰ Alarm will ring only within 2 hours of set time
+                </div>
+            </div>
+        </div>
+
+        <!-- World Clock Category -->
+        <div class="category" id="world-category">
+            <div class="world-clock-display">
+                <h3>🌍 India Standard Time (IST)</h3>
+                <div class="world-time" id="worldTime">--:--:--</div>
+                <div class="world-date" id="worldDate">---, -- --- ----</div>
+                
+                <div class="world-numbers" id="worldNumbers">
+                    <!-- Numbers 1-31 will be inserted here -->
+                </div>
+                
+                <div class="other-timezones">
+                    <h4>Other Time Zones</h4>
+                    <div class="timezone-item">
+                        <span>🇺🇸 New York:</span>
+                        <span id="nyTime">--:--</span>
+                    </div>
+                    <div class="timezone-item">
+                        <span>🇬🇧 London:</span>
+                        <span id="londonTime">--:--</span>
+                    </div>
+                    <div class="timezone-item">
+                        <span>🇯🇵 Tokyo:</span>
+                        <span id="tokyoTime">--:--</span>
+                    </div>
+                    <div class="timezone-item">
+                        <span>🇦🇪 Dubai:</span>
+                        <span id="dubaiTime">--:--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Stats and PDF -->
+        <div class="stats-section">
+            <h3>📊 Your Journey Stats</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">Time on Site:</span>
+                    <span class="stat-value" id="usageTime">0 min</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Stopwatch Used:</span>
+                    <span class="stat-value" id="stopwatchCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Timers Set:</span>
+                    <span class="stat-value" id="timerCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Alarms Set:</span>
+                    <span class="stat-value" id="alarmCount">0</span>
+                </div>
+            </div>
+            
+            <button id="downloadPDF" class="btn pdf-btn">
+                📄 Download PDF Report
+            </button>
+        </div>
+
+        <!-- Audio for alarm -->
         <audio id="alarmSound" loop style="display:none">
             <source src="love.mp3" type="audio/mpeg">
         </audio>
