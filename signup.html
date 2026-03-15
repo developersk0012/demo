@@ -2,108 +2,115 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SK Education – Register</title>
-<link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Sign Up – SK Education</title>
+<link rel="stylesheet" href="style.css">
 <style>
-body{background:#0d1654;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;position:relative}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 70%,rgba(255,111,0,.15),transparent 50%);pointer-events:none}
-.wrap{width:100%;max-width:400px;position:relative;z-index:1}
-.logo-area{text-align:center;margin-bottom:22px}
-.logo-sm{width:76px;height:76px;border-radius:50%;background:#fff;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border:3px solid var(--gold);box-shadow:0 0 0 8px rgba(255,214,0,.1);overflow:hidden}
-.logo-sm img{width:60px;height:60px;object-fit:contain;border-radius:50%}
-.logo-sm .lf{font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;color:var(--pri)}
-.brand{font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:#fff}
-.card{background:rgba(255,255,255,.97);border-radius:22px;padding:26px 22px;box-shadow:0 24px 60px rgba(0,0,0,.4);position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--acc),var(--pri),var(--acc))}
-.card h2{font-size:19px;font-weight:700;color:var(--pri);margin-bottom:4px}
-.card p{font-size:13px;color:var(--muted);margin-bottom:18px}
-.bottom-link{text-align:center;font-size:13px;color:var(--muted);margin-top:16px}
-.bottom-link a{font-weight:700}
+body { min-height:100vh; background:linear-gradient(160deg,#0d47a1 0%,#1a73e8 45%,#42a5f5 100%); display:flex; align-items:center; justify-content:center; padding:20px; }
+.auth-wrap { width:100%; max-width:420px; }
+.auth-card { background:#fff; border-radius:24px; padding:30px 26px 26px; box-shadow:0 24px 60px rgba(0,0,0,.28); animation:fadeIn .4s ease; }
+[data-theme="dark"] .auth-card { background:#161b22; }
+.brand { text-align:center; margin-bottom:22px; }
+.brand-name { font-family:'Baloo 2',sans-serif; font-size:20px; font-weight:800; color:#1a73e8; margin-top:8px; }
+.brand-tag { font-size:11.5px; color:#6b7280; margin-top:2px; }
+.auth-heading { font-size:18px; font-weight:700; margin-bottom:18px; }
+.divider { text-align:center; font-size:12px; color:#6b7280; margin:14px 0; position:relative; }
+.divider::before,.divider::after { content:''; position:absolute; top:50%; width:38%; height:1px; background:#e5e7eb; }
+.divider::before { left:0; } .divider::after { right:0; }
+.login-link { text-align:center; margin-top:14px; font-size:13px; color:#6b7280; }
+.login-link a { color:#1a73e8; font-weight:700; cursor:pointer; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="logo-area">
-    <div class="logo-sm">
-      <img src="sk.png" alt="SK" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="lf" style="display:none">SK</div>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="brand">
+      <div class="sk-logo lg" id="main-logo" style="margin:0 auto">SK</div>
+      <div class="brand-name">SK Education</div>
+      <div class="brand-tag">Swami Vivekanand Study Point • Direction to Success</div>
     </div>
-    <div class="brand">SK Education</div>
-  </div>
-  <div class="card">
-    <h2>Register karein 🎓</h2>
-    <p>Free mein join karein — koi OTP nahi!</p>
-    <div class="msg" id="msg"></div>
-    <button class="btn btn-google btn-block" id="g-btn" onclick="doGoogle()" style="margin-bottom:4px">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="G">
-      Google se Sign Up (1 Click!)
-    </button>
-    <div class="divider">ya manually bharein</div>
+    <div class="auth-heading">Create Account 🎓</div>
+    <div class="alert alert-error" id="err-box"></div>
     <div class="form-group">
-      <label>Pura Naam *</label>
-      <div class="input-wrap has-icon"><span class="input-icon">👤</span>
-        <input type="text" id="name" placeholder="Jaise: Rahul Kumar">
-      </div>
+      <label>Full Name</label>
+      <input class="form-input" id="f-name" type="text" placeholder="Enter your full name" autocomplete="name">
     </div>
     <div class="form-group">
-      <label>Email Address *</label>
-      <div class="input-wrap has-icon"><span class="input-icon">✉️</span>
-        <input type="email" id="email" placeholder="apna@email.com">
-      </div>
+      <label>Mobile Number</label>
+      <input class="form-input" id="f-phone" type="tel" placeholder="10-digit mobile number" maxlength="10">
     </div>
     <div class="form-group">
-      <label>Mobile Number *</label>
-      <div class="input-wrap has-icon"><span class="input-icon">📱</span>
-        <input type="tel" id="phone" placeholder="10 digit number" maxlength="10">
-      </div>
+      <label>Email Address</label>
+      <input class="form-input" id="f-email" type="email" placeholder="your@email.com">
     </div>
     <div class="form-group">
-      <label>Password *</label>
-      <div class="input-wrap has-icon"><span class="input-icon">🔑</span>
-        <input type="password" id="password" placeholder="Minimum 6 characters" onkeydown="if(event.key==='Enter')doRegister()">
-      </div>
+      <label>Password</label>
+      <input class="form-input" id="f-pass" type="password" placeholder="Min. 6 characters">
     </div>
-    <button class="btn btn-accent btn-block" id="reg-btn" onclick="doRegister()">Register karo &amp; Dashboard kholein 🚀</button>
-    <div class="bottom-link">Pehle se account hai? <a href="index.html">Login karein</a></div>
+    <button class="btn btn-primary" id="signup-btn" onclick="doSignup()">Sign Up Free</button>
+    <div class="login-link">Already have account? <a href="login.html">Login here</a></div>
   </div>
 </div>
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getAuth,createUserWithEmailAndPassword,GoogleAuthProvider,signInWithPopup,updateProfile}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import{getDatabase,ref,set,get}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const FC={apiKey:"AIzaSyAXvrUDLT9JosL5eE4SsXqiuGP8rmS9RYk",authDomain:"education-bd8a9.firebaseapp.com",databaseURL:"https://education-bd8a9-default-rtdb.firebaseio.com",projectId:"education-bd8a9",storageBucket:"education-bd8a9.firebasestorage.app",messagingSenderId:"44581091231",appId:"1:44581091231:android:76d10f0d2597d3b64bafaa"};
-const app=initializeApp(FC),auth=getAuth(app),db=getDatabase(app);
-if(localStorage.getItem('sk_user')){window.location.replace('dashboard.html');}
-function showMsg(t,type){const e=document.getElementById('msg');e.textContent=t;e.className='msg show '+(type==='err'?'msg-error':'msg-success');}
-async function saveAndGo(uid,u){await set(ref(db,'users/'+uid),u);localStorage.setItem('sk_user',JSON.stringify({uid,...u}));window.location.replace('dashboard.html');}
-window.doRegister=async()=>{
-  const name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),phone=document.getElementById('phone').value.trim(),pass=document.getElementById('password').value;
-  if(!name){showMsg('Apna naam bharein','err');return;}
-  if(!email){showMsg('Email address bharein','err');return;}
-  if(phone.length<10){showMsg('Valid 10-digit mobile number bharein','err');return;}
-  if(pass.length<6){showMsg('Password 6 characters se zyada hona chahiye','err');return;}
-  const btn=document.getElementById('reg-btn');btn.innerHTML='<span class="spinner"></span> Register ho raha hai...';btn.disabled=true;
-  try{
-    const cred=await createUserWithEmailAndPassword(auth,email,pass);
-    await updateProfile(cred.user,{displayName:name});
-    const u={name,email,phone,class:'10th',school:'Swami Vivekanand Study Point',registeredAt:new Date().toISOString(),role:'student'};
-    await saveAndGo(cred.user.uid,u);
-  }catch(e){
-    const m={'auth/email-already-in-use':'Yeh email pehle se registered hai','auth/invalid-email':'Valid email dalein','auth/weak-password':'Password 6+ characters chahiye'};
-    showMsg(m[e.code]||'Error: '+e.message,'err');btn.innerHTML='Register karo &amp; Dashboard kholein 🚀';btn.disabled=false;
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="shared.js"></script>
+<script>
+applyTheme();
+// If already logged in, redirect
+window.addEventListener('DOMContentLoaded', () => {
+  const u = getUser();
+  if (u) { window.location.href = u.isAdmin ? 'admin.html' : 'dashboard.html'; }
+  loadLogo(document.getElementById('main-logo'));
+});
+
+async function doSignup() {
+  const name = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const email = document.getElementById('f-email').value.trim().toLowerCase();
+  const pass = document.getElementById('f-pass').value;
+  const errBox = document.getElementById('err-box');
+  const btn = document.getElementById('signup-btn');
+  errBox.style.display = 'none';
+
+  if (!name) return showErr('Name is required');
+  if (phone.length < 10 || !/^\d+$/.test(phone)) return showErr('Enter valid 10-digit mobile number');
+  if (!email || !email.includes('@')) return showErr('Enter valid email address');
+  if (pass.length < 6) return showErr('Password must be at least 6 characters');
+
+  btn.textContent = 'Creating account...'; btn.disabled = true;
+
+  try {
+    const existing = await fbGet('users');
+    if (existing) {
+      for (const k of Object.keys(existing)) {
+        if (existing[k].phone === phone) return showErr('Account already exists with this mobile. Please login.');
+        if (existing[k].email === email) return showErr('Account already exists with this email. Please login.');
+      }
+    }
+    const uid = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const userData = {
+      uid, name, phone, email,
+      password: btoa(pass),
+      class: '10',
+      joinDate: new Date().toISOString(),
+      courses: ['dream465']
+    };
+    await fbSet(`users/${uid}`, userData);
+    setUser(userData);
+    generateIDCard(userData);
+    showToast('Welcome ' + name + '! 🎉 Your ID card is downloading...');
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+  } catch(e) {
+    showErr('Something went wrong. Check internet & try again.');
+    btn.textContent = 'Sign Up Free'; btn.disabled = false;
   }
-};
-window.doGoogle=async()=>{
-  const btn=document.getElementById('g-btn');btn.innerHTML='<span class="spinner spinner-dark"></span> Connecting...';btn.disabled=true;
-  try{
-    const cred=await signInWithPopup(auth,new GoogleAuthProvider());
-    const snap=await get(ref(db,'users/'+cred.user.uid));
-    if(snap.exists()){localStorage.setItem('sk_user',JSON.stringify({uid:cred.user.uid,...snap.val()}));window.location.replace('dashboard.html');return;}
-    const u={name:cred.user.displayName||'Student',email:cred.user.email,phone:'',class:'10th',school:'Swami Vivekanand Study Point',registeredAt:new Date().toISOString(),role:'student'};
-    await saveAndGo(cred.user.uid,u);
-  }catch(e){showMsg('Google fail: '+e.message,'err');btn.innerHTML='<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Google se Sign Up';btn.disabled=false;}
-};
+
+  function showErr(msg) {
+    errBox.textContent = msg; errBox.style.display = 'block';
+    btn.textContent = 'Sign Up Free'; btn.disabled = false;
+  }
+}
 </script>
+<div class="toast-wrap"><div class="toast" id="sk-toast"></div></div>
 </body>
 </html>

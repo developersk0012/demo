@@ -2,95 +2,69 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SK Education – Login</title>
-<link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>SK Education – Loading</title>
 <style>
-body{background:#0d1654;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;position:relative;overflow:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 25% 60%,rgba(255,111,0,.18),transparent 55%),radial-gradient(ellipse at 75% 20%,rgba(57,73,171,.35),transparent 55%);pointer-events:none}
-.wrap{width:100%;max-width:390px;position:relative;z-index:1}
-.logo-area{text-align:center;margin-bottom:28px}
-.big-logo{width:96px;height:96px;border-radius:50%;background:#fff;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;border:3px solid var(--gold);box-shadow:0 0 0 10px rgba(255,214,0,.1);overflow:hidden}
-.big-logo img{width:78px;height:78px;object-fit:contain;border-radius:50%}
-.big-logo .lf{font-family:'Baloo 2',cursive;font-size:32px;font-weight:800;color:var(--pri)}
-.brand{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:#fff;letter-spacing:.5px}
-.tagline{font-size:10px;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;margin-top:4px}
-.card{background:rgba(255,255,255,.97);border-radius:22px;padding:28px 24px;box-shadow:0 24px 60px rgba(0,0,0,.4);position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--pri),var(--pri-light),var(--acc))}
-.card h2{font-size:20px;font-weight:700;color:var(--pri);margin-bottom:4px}
-.card p{font-size:13px;color:var(--muted);margin-bottom:20px}
-.forgot{text-align:right;margin-top:-8px;margin-bottom:14px}
-.forgot a{font-size:12px;font-weight:600}
-.bottom-link{text-align:center;font-size:13px;color:var(--muted);margin-top:16px}
-.bottom-link a{font-weight:700}
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: linear-gradient(160deg, #0d47a1 0%, #1a73e8 50%, #42a5f5 100%);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    font-family: 'Poppins', sans-serif;
+  }
+  .box { text-align: center; color: #fff; }
+  .logo {
+    width: 84px; height: 84px; border-radius: 50%;
+    background: rgba(255,255,255,.2); border: 3px solid rgba(255,255,255,.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; font-weight: 900; margin: 0 auto 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.2);
+  }
+  h2 { font-size: 22px; font-weight: 800; }
+  p { font-size: 13px; opacity: .75; margin-top: 6px; }
+  .dots { margin-top: 20px; }
+  .dot {
+    display: inline-block; width: 9px; height: 9px;
+    background: rgba(255,255,255,.8); border-radius: 50%; margin: 0 4px;
+    animation: bounce .9s ease-in-out infinite;
+  }
+  .dot:nth-child(2) { animation-delay: .18s; }
+  .dot:nth-child(3) { animation-delay: .36s; }
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: .6; }
+    40% { transform: translateY(-10px); opacity: 1; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="logo-area">
-    <div class="big-logo">
-      <img src="sk.png" alt="SK" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="lf" style="display:none">SK</div>
-    </div>
-    <div class="brand">SK Education</div>
-    <div class="tagline">Swami Vivekanand Study Point</div>
-  </div>
-  <div class="card">
-    <h2>Welcome Back 👋</h2>
-    <p>Apne account mein login karein</p>
-    <div class="msg" id="msg"></div>
-    <div class="form-group">
-      <label>Email Address</label>
-      <div class="input-wrap has-icon">
-        <span class="input-icon">✉️</span>
-        <input type="email" id="email" placeholder="apna@email.com" autocomplete="email">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Password</label>
-      <div class="input-wrap has-icon">
-        <span class="input-icon">🔒</span>
-        <input type="password" id="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-      </div>
-    </div>
-    <div class="forgot"><a href="#">Password bhul gaye?</a></div>
-    <button class="btn btn-primary btn-block" id="login-btn" onclick="doLogin()">Login karein</button>
-    <div class="divider">ya phir</div>
-    <button class="btn btn-google btn-block" id="google-btn" onclick="doGoogle()">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="G">
-      Google se Login
-    </button>
-    <div class="bottom-link">Naya account? <a href="signup.html">Register karein</a></div>
+<div class="box">
+  <div class="logo">SK</div>
+  <h2>SK Education</h2>
+  <p>Swami Vivekanand Study Point</p>
+  <div class="dots">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
   </div>
 </div>
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getAuth,signInWithEmailAndPassword,GoogleAuthProvider,signInWithPopup}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import{getDatabase,ref,get,set}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const FC={apiKey:"AIzaSyAXvrUDLT9JosL5eE4SsXqiuGP8rmS9RYk",authDomain:"education-bd8a9.firebaseapp.com",databaseURL:"https://education-bd8a9-default-rtdb.firebaseio.com",projectId:"education-bd8a9",storageBucket:"education-bd8a9.firebasestorage.app",messagingSenderId:"44581091231",appId:"1:44581091231:android:76d10f0d2597d3b64bafaa"};
-const app=initializeApp(FC),auth=getAuth(app),db=getDatabase(app);
-if(localStorage.getItem('sk_user')){window.location.replace('dashboard.html');}
-function showMsg(t,type){const e=document.getElementById('msg');e.textContent=t;e.className='msg show '+(type==='err'?'msg-error':'msg-success');}
-async function afterLogin(user){
-  let snap=await get(ref(db,'users/'+user.uid));
-  let u=snap.exists()?snap.val():{name:user.displayName||'Student',email:user.email,phone:'',class:'10th',school:'Swami Vivekanand Study Point',registeredAt:new Date().toISOString(),role:'student'};
-  if(!snap.exists())await set(ref(db,'users/'+user.uid),u);
-  localStorage.setItem('sk_user',JSON.stringify({uid:user.uid,...u}));
-  window.location.replace('dashboard.html');
-}
-window.doLogin=async()=>{
-  const email=document.getElementById('email').value.trim(),pass=document.getElementById('password').value;
-  if(!email||!pass){showMsg('Email aur password dono bharein','err');return;}
-  const btn=document.getElementById('login-btn');btn.innerHTML='<span class="spinner"></span> Login ho raha hai...';btn.disabled=true;
-  try{const c=await signInWithEmailAndPassword(auth,email,pass);await afterLogin(c.user);}
-  catch(e){const m={'auth/user-not-found':'Yeh email registered nahi hai','auth/wrong-password':'Password galat hai','auth/invalid-credential':'Email ya password galat hai','auth/too-many-requests':'Bahut zyada attempts. Kuch der baad try karein'};
-  showMsg(m[e.code]||'Login fail: '+e.message,'err');btn.innerHTML='Login karein';btn.disabled=false;}
-};
-window.doGoogle=async()=>{
-  const btn=document.getElementById('google-btn');btn.innerHTML='<span class="spinner spinner-dark"></span> Connecting...';btn.disabled=true;
-  try{const c=await signInWithPopup(auth,new GoogleAuthProvider());await afterLogin(c.user);}
-  catch(e){showMsg('Google login fail: '+e.message,'err');btn.innerHTML='<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Google se Login';btn.disabled=false;}
-};
+
+<script>
+  // Smart entry point:
+  // logged in user  → dashboard.html
+  // admin           → admin.html
+  // new/logged out  → signup.html
+  (function() {
+    var saved = localStorage.getItem('sk_user');
+    if (!saved) { window.location.replace('signup.html'); return; }
+    try {
+      var u = JSON.parse(saved);
+      if (u && u.isAdmin) window.location.replace('admin.html');
+      else if (u && u.uid)  window.location.replace('dashboard.html');
+      else window.location.replace('signup.html');
+    } catch(e) {
+      localStorage.removeItem('sk_user');
+      window.location.replace('signup.html');
+    }
+  })();
 </script>
 </body>
 </html>

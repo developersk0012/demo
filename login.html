@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Login – SK Education</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { min-height:100vh; background:linear-gradient(160deg,#0d47a1 0%,#1a73e8 45%,#42a5f5 100%); display:flex; align-items:center; justify-content:center; padding:20px; }
+.auth-card { background:#fff; border-radius:24px; padding:30px 26px 26px; width:100%; max-width:420px; box-shadow:0 24px 60px rgba(0,0,0,.28); animation:fadeIn .4s ease; }
+[data-theme="dark"] .auth-card { background:#161b22; }
+.brand { text-align:center; margin-bottom:22px; }
+.brand-name { font-family:'Baloo 2',sans-serif; font-size:20px; font-weight:800; color:#1a73e8; margin-top:8px; }
+.brand-tag { font-size:11.5px; color:#6b7280; margin-top:2px; }
+.auth-heading { font-size:18px; font-weight:700; margin-bottom:18px; }
+.signup-link { text-align:center; margin-top:14px; font-size:13px; color:#6b7280; }
+.signup-link a { color:#1a73e8; font-weight:700; }
+.admin-link { text-align:center; margin-top:8px; font-size:11px; color:#9ca3af; }
+.admin-link a { color:#9ca3af; }
+</style>
+</head>
+<body>
+<div class="auth-card">
+  <div class="brand">
+    <div class="sk-logo lg" id="main-logo" style="margin:0 auto">SK</div>
+    <div class="brand-name">SK Education</div>
+    <div class="brand-tag">Swami Vivekanand Study Point • Direction to Success</div>
+  </div>
+  <div class="auth-heading">Welcome Back! 👋</div>
+  <div class="alert alert-error" id="err-box"></div>
+  <div class="form-group">
+    <label>Mobile Number or Email</label>
+    <input class="form-input" id="f-user" type="text" placeholder="Mobile number or email address" autocomplete="username">
+  </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input class="form-input" id="f-pass" type="password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')doLogin()">
+  </div>
+  <button class="btn btn-primary" id="login-btn" onclick="doLogin()">Login</button>
+  <div class="signup-link">New user? <a href="signup.html">Create account free</a></div>
+  <div class="admin-link"><a href="admin.html">Admin Panel →</a></div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+applyTheme();
+window.addEventListener('DOMContentLoaded', () => {
+  const u = getUser();
+  if (u) window.location.href = u.isAdmin ? 'admin.html' : 'dashboard.html';
+  loadLogo(document.getElementById('main-logo'));
+});
+
+async function doLogin() {
+  const userIn = document.getElementById('f-user').value.trim().toLowerCase();
+  const pass = document.getElementById('f-pass').value;
+  const errBox = document.getElementById('err-box');
+  const btn = document.getElementById('login-btn');
+  errBox.style.display = 'none';
+
+  if (!userIn || !pass) return showErr('Please fill all fields');
+  btn.textContent = 'Logging in...'; btn.disabled = true;
+
+  try {
+    const users = await fbGet('users');
+    if (users) {
+      for (const uid of Object.keys(users)) {
+        const u = users[uid];
+        if ((u.phone === userIn || u.email === userIn) && atob(u.password) === pass) {
+          setUser(u);
+          showToast('Welcome back, ' + u.name + '! 👋');
+          setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+          return;
+        }
+      }
+    }
+    showErr('Incorrect mobile/email or password. Please try again.');
+  } catch(e) {
+    showErr('Network error. Please check your internet connection.');
+  }
+
+  function showErr(msg) {
+    errBox.textContent = msg; errBox.style.display = 'block';
+    btn.textContent = 'Login'; btn.disabled = false;
+  }
+}
+</script>
+<div class="toast-wrap"><div class="toast" id="sk-toast"></div></div>
+</body>
+</html>

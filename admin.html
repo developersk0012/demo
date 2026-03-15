@@ -2,464 +2,644 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SK Education – Admin</title>
-<link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Admin Panel – SK Education</title>
+<link rel="stylesheet" href="style.css">
 <style>
-body{background:#f0f2ff;padding-bottom:0}
-/* --- Password Screen --- */
-#pw-screen{position:fixed;inset:0;background:linear-gradient(135deg,#0d1654,#1a237e);display:flex;align-items:center;justify-content:center;z-index:9999;padding:24px}
-#pw-card{background:#fff;border-radius:22px;padding:32px 24px;width:100%;max-width:360px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.5)}
-#pw-card .lock{font-size:56px;margin-bottom:14px}
-#pw-card h2{font-family:'Baloo 2',cursive;font-size:24px;color:var(--pri);margin-bottom:6px}
-#pw-card p{font-size:13px;color:var(--muted);margin-bottom:20px}
-#pw-err{color:var(--danger);font-size:13px;font-weight:600;min-height:22px;margin-bottom:8px}
-/* --- Admin Layout --- */
-#admin-wrap{display:none}
-.adm-header{background:linear-gradient(135deg,#0d1654,#1a237e,#3949ab);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 18px rgba(13,22,84,.4);position:sticky;top:0;z-index:300}
-.adm-header h1{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;margin:0;line-height:1}
-.adm-header p{font-size:11px;opacity:.7;margin:0}
-.adm-logo{width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#1a237e;overflow:hidden;flex-shrink:0}
-.adm-logo img{width:38px;height:38px;object-fit:contain;border-radius:50%}
-/* Tabs */
-.adm-nav{display:flex;background:#fff;border-bottom:2px solid #e0e0e0;overflow-x:auto;padding:0 8px;gap:0;-webkit-overflow-scrolling:touch}
-.adm-nav::-webkit-scrollbar{display:none}
-.atab{padding:13px 16px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;border-top:none;border-left:none;border-right:none;background:none;font-family:'Poppins',sans-serif}
-.atab.active{color:var(--pri);border-bottom-color:var(--pri)}
-.adm-body{max-width:900px;margin:0 auto;padding:18px 14px}
-/* Panels */
-.panel{display:none}.panel.active{display:block}
-/* Stats */
-.stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
-@media(min-width:600px){.stat-row{grid-template-columns:repeat(4,1fr)}}
-.stat{background:#fff;border-radius:14px;padding:16px;box-shadow:var(--shadow);text-align:center}
-.stat-n{font-size:30px;font-weight:800;color:var(--pri);font-family:'Baloo 2',cursive}
-.stat-l{font-size:11px;color:var(--muted);margin-top:2px}
-/* Admin Cards */
-.acard{background:#fff;border-radius:16px;padding:20px;box-shadow:var(--shadow);margin-bottom:18px}
-.acard-title{font-size:15px;font-weight:700;color:var(--pri);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-/* === CATEGORY TABS (like screenshot) === */
-.cat-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.ct{padding:9px 16px;border-radius:12px;border:2px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;color:var(--muted);transition:all .15s}
-.ct.active{background:var(--pri);border-color:var(--pri);color:#fff}
-/* Add Item Form */
-.add-item-box{background:#f8f9ff;border-radius:14px;padding:18px;margin-top:0}
-.add-item-box h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
-.add-item-box p{font-size:12px;color:var(--muted);margin-bottom:16px}
-.sub-select-wrap{margin-bottom:14px}
-.sub-select-wrap label{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:6px;letter-spacing:.3px}
-/* Type toggle buttons */
-.type-row{display:flex;gap:10px;margin-bottom:16px}
-.type-btn{flex:1;padding:12px;border-radius:12px;border:2px solid var(--border);background:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;color:var(--muted);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
-.type-btn.active{border-color:var(--pri);background:var(--pri);color:#fff}
-/* Items list */
-.items-list{margin-top:18px}
-.items-list h4{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-.item-row{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;box-shadow:0 1px 6px rgba(0,0,0,.07);border:1px solid #f0f0f0}
-.item-ico{font-size:24px;flex-shrink:0;margin-top:2px}
-.item-info{flex:1;min-width:0}
-.item-title{font-size:13px;font-weight:700;color:var(--text);word-break:break-word}
-.item-meta{font-size:11px;color:var(--muted);margin-top:3px}
-.item-link{font-size:11px;color:var(--pri);word-break:break-all;margin-top:2px;display:block}
-.del-btn{background:#ffebee;color:#c62828;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;flex-shrink:0;white-space:nowrap}
-/* Users Table */
-.utbl{width:100%;border-collapse:collapse;font-size:13px}
-.utbl th{background:#e8eaf6;padding:10px 12px;font-weight:700;color:var(--pri);text-align:left;white-space:nowrap}
-.utbl td{padding:10px 12px;border-bottom:1px solid #f0f0f0;color:var(--text);word-break:break-all}
-.utbl tr:hover td{background:#f8f9ff}
-/* Slider */
-.slide-item{display:flex;align-items:center;gap:10px;background:#f8f9ff;border-radius:10px;padding:10px 12px;margin-bottom:8px}
-.slide-img{width:64px;height:42px;object-fit:cover;border-radius:7px;flex-shrink:0;background:#e0e0e0}
-.slide-url{font-size:12px;color:var(--muted);flex:1;word-break:break-all}
-.del-slide{background:#ffebee;color:#c62828;border:none;border-radius:7px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;flex-shrink:0}
-.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:480px){.form-row2{grid-template-columns:1fr}}
+.admin-shell { display:flex; flex-direction:column; min-height:100vh; }
+.a-screen { display:none; }
+.a-screen.active { display:block; }
+.a-btn { background:none; border:none; color:var(--primary); font-size:13px; font-weight:700; cursor:pointer; font-family:'Poppins',sans-serif; display:flex; align-items:center; gap:5px; padding:0; margin-bottom:16px; }
+
+/* Admin Login */
+body.admin-bg { background:linear-gradient(135deg,#0f1729 0%,#1a2744 60%,#1a73e8 100%); display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; }
+.admin-login-card { background:#fff; border-radius:22px; padding:30px 26px; width:100%; max-width:380px; box-shadow:0 24px 60px rgba(0,0,0,.4); animation:fadeIn .4s ease; }
+[data-theme="dark"] .admin-login-card { background:#161b22; }
+
+/* Stats bar */
+.stats-bar { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:12px 13px; }
+.stat-card { background:var(--card); border-radius:12px; padding:12px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+.stat-num { font-size:22px; font-weight:800; color:var(--primary); }
+.stat-lbl { font-size:11px; color:var(--muted); margin-top:2px; }
+
+/* User card for admin */
+.user-item { background:var(--card); margin:0 13px 10px; border-radius:14px; padding:14px; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+.user-item-head { display:flex; justify-content:space-between; align-items:flex-start; }
+.user-item-name { font-weight:700; font-size:14px; }
+.user-item-info { font-size:12px; color:var(--muted); margin-top:4px; line-height:1.6; }
+.user-item-actions { display:flex; gap:8px; margin-top:10px; }
+.small-btn { padding:6px 13px; border-radius:8px; font-size:12px; font-weight:600; border:none; cursor:pointer; font-family:'Poppins',sans-serif; }
+.small-btn-blue { background:#dbeafe; color:#1a73e8; }
+.small-btn-green { background:#d1fae5; color:#065f46; }
+
+/* Chat admin */
+.chat-thread { background:var(--card); margin:0 13px 12px; border-radius:14px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.06); }
+.chat-thread-head { padding:12px 14px; background:var(--bg); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+.chat-thread-name { font-weight:700; font-size:14px; }
+.chat-thread-msgs { padding:12px 14px; max-height:180px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; }
+.chat-thread-bar { padding:10px 13px; border-top:1px solid var(--border); display:flex; gap:8px; }
+.admin-reply-inp { flex:1; padding:8px 12px; border:2px solid var(--border); border-radius:10px; font-size:13px; font-family:'Poppins',sans-serif; outline:none; background:var(--bg); color:var(--text); }
+.admin-reply-inp:focus { border-color:var(--primary); }
+.reply-send-btn { background:var(--primary); color:#fff; border:none; padding:8px 16px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; font-family:'Poppins',sans-serif; }
+
+/* Content list in admin */
+.content-item { background:var(--card); margin:0 13px 9px; border-radius:12px; padding:12px 14px; box-shadow:0 2px 8px rgba(0,0,0,.05); display:flex; align-items:center; gap:10px; }
+.content-item-info { flex:1; min-width:0; }
+.content-item-title { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.content-item-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+.del-btn { background:#fee2e2; color:#dc2626; border:none; width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:14px; flex-shrink:0; }
 </style>
 </head>
-<body>
+<body class="admin-bg">
 
-<!-- Password Screen -->
-<div id="pw-screen">
-  <div id="pw-card">
-    <div class="lock">🔐</div>
-    <h2>Admin Panel</h2>
-    <p>SK Education – Admin Access Only</p>
-    <div id="pw-err"></div>
+<!-- ===== ADMIN LOGIN ===== -->
+<div id="admin-login" style="width:100%;max-width:380px">
+  <div class="admin-login-card">
+    <div style="text-align:center;margin-bottom:22px">
+      <div class="sk-logo lg" id="al-logo" style="margin:0 auto">SK</div>
+      <div style="font-family:'Baloo 2',sans-serif;font-size:18px;font-weight:800;color:#1a73e8;margin-top:8px">Admin Panel</div>
+      <div style="font-size:11px;color:#6b7280;margin-top:2px">SK Education Management System</div>
+    </div>
+    <div class="auth-heading" style="font-size:16px">Admin Login 🔐</div>
+    <div class="alert alert-error" id="admin-err"></div>
     <div class="form-group">
-      <div class="input-wrap has-icon">
-        <span class="input-icon">🔑</span>
-        <input type="password" id="pw-in" placeholder="Admin password bharein" onkeydown="if(event.key==='Enter')checkPw()">
-      </div>
+      <label>Admin Password</label>
+      <input class="form-input" id="admin-pw" type="password" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doAdminLogin()">
     </div>
-    <button class="btn btn-primary btn-block" onclick="checkPw()">Access karein</button>
+    <button class="btn btn-primary" id="admin-login-btn" onclick="doAdminLogin()">Login as Admin</button>
+    <div style="text-align:center;margin-top:12px;font-size:12px;color:#9ca3af">
+      <a href="login.html" style="color:#9ca3af">← Back to Student Login</a>
+    </div>
   </div>
 </div>
 
-<!-- Main Admin -->
-<div id="admin-wrap">
-  <div class="adm-header">
-    <div class="adm-logo">
-      <img src="sk.png" alt="SK" onerror="this.style.display='none';this.parentElement.textContent='SK'">
+<!-- ===== ADMIN DASHBOARD ===== -->
+<div id="admin-dash" style="display:none;width:100%;min-height:100vh;background:var(--bg)">
+
+  <!-- Admin Header -->
+  <div class="admin-header-bar" style="position:sticky;top:0;z-index:100">
+    <div class="sk-logo sm" id="ad-logo">SK</div>
+    <div style="flex:1">
+      <div class="admin-title">Admin Panel</div>
+      <div class="admin-sub">SK Education • Management</div>
     </div>
-    <div>
-      <h1>SK Education Admin</h1>
-      <p>Swami Vivekanand Study Point</p>
-    </div>
-    <button onclick="location.href='dashboard.html'" style="margin-left:auto;background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;white-space:nowrap">🏠 Site</button>
+    <button onclick="doAdminLogout()" style="background:rgba(239,68,68,.2);color:#ef4444;border:none;padding:7px 13px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif">Logout</button>
   </div>
-  <nav class="adm-nav">
-    <button class="atab active" onclick="showTab('dash',this)">📊 Dashboard</button>
-    <button class="atab" onclick="showTab('courses',this)">📚 Courses</button>
-    <button class="atab" onclick="showTab('users',this)">👥 Users</button>
-    <button class="atab" onclick="showTab('slider',this)">🖼️ Slider</button>
-  </nav>
 
-  <div class="adm-body">
-
-    <!-- DASHBOARD -->
-    <div class="panel active" id="panel-dash">
-      <div class="stat-row">
-        <div class="stat"><div class="stat-n" id="st-u">0</div><div class="stat-l">👥 Users</div></div>
-        <div class="stat"><div class="stat-n" id="st-c">0</div><div class="stat-l">📚 Content</div></div>
-        <div class="stat"><div class="stat-n" id="st-f">0</div><div class="stat-l">🆓 Free</div></div>
-        <div class="stat"><div class="stat-n" id="st-p">0</div><div class="stat-l">💰 Paid</div></div>
+  <!-- MAIN SCREEN -->
+  <div class="a-screen active" id="as-main">
+    <!-- Stats -->
+    <div class="stats-bar" id="stats-bar">
+      <div class="stat-card"><div class="stat-num" id="stat-users">...</div><div class="stat-lbl">Students</div></div>
+      <div class="stat-card"><div class="stat-num" id="stat-content">...</div><div class="stat-lbl">Content</div></div>
+      <div class="stat-card"><div class="stat-num" id="stat-msgs">...</div><div class="stat-lbl">Messages</div></div>
+    </div>
+    <!-- Grid -->
+    <div class="grid-3" style="margin-top:4px">
+      <div class="grid-card" onclick="adminGo('upload-pdf')">
+        <div class="grid-icon" style="background:#dbeafe">📄</div>
+        <div class="grid-label">Upload PDF</div>
       </div>
-      <div class="acard">
-        <div class="acard-title">⚡ Quick Actions</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px">
-          <button class="btn btn-primary btn-sm" onclick="showTab('courses',document.querySelectorAll('.atab')[1])">+ Naya Content Add</button>
-          <button class="btn btn-accent btn-sm" onclick="showTab('slider',document.querySelectorAll('.atab')[3])">+ Slider Image</button>
-          <button class="btn btn-sm" style="background:#e8eaf6;color:var(--pri);border:none" onclick="loadStats()">🔄 Refresh</button>
-        </div>
+      <div class="grid-card" onclick="adminGo('upload-video')">
+        <div class="grid-icon" style="background:#dcfce7">🎬</div>
+        <div class="grid-label">Upload Video</div>
+      </div>
+      <div class="grid-card" onclick="adminGo('notifications')">
+        <div class="grid-icon" style="background:#fef3c7">🔔</div>
+        <div class="grid-label">Send Notification</div>
+      </div>
+      <div class="grid-card" onclick="adminGo('users')">
+        <div class="grid-icon" style="background:#f3e8ff">👥</div>
+        <div class="grid-label">All Students</div>
+      </div>
+      <div class="grid-card" onclick="adminGo('chat')">
+        <div class="grid-icon" style="background:#fce7f3">💬</div>
+        <div class="grid-label">Student Chats</div>
+      </div>
+      <div class="grid-card" onclick="adminGo('manage-content')">
+        <div class="grid-icon" style="background:#d1fae5">📚</div>
+        <div class="grid-label">Manage Content</div>
+      </div>
+      <div class="grid-card" onclick="adminGo('free-notes')">
+        <div class="grid-icon" style="background:#fee2e2">📝</div>
+        <div class="grid-label">Free Notes</div>
+      </div>
+      <div class="grid-card" onclick="adminGo('free-tests')">
+        <div class="grid-icon" style="background:#fef9c3">✅</div>
+        <div class="grid-label">Free Tests</div>
+      </div>
+      <div class="grid-card" onclick="adminGo('timetable')">
+        <div class="grid-icon" style="background:#e0e7ff">📅</div>
+        <div class="grid-label">Timetable</div>
       </div>
     </div>
-
-    <!-- COURSES (Screenshot-style: category tabs + subcategory + upload form) -->
-    <div class="panel" id="panel-courses">
-      <div class="acard" style="padding-bottom:0">
-        <!-- Category Tabs like screenshot -->
-        <div class="acard-title">📚 Content Manager</div>
-        <div class="cat-tabs" id="cat-tabs">
-          <!-- Rendered by JS -->
-        </div>
-        <!-- Add Item Box -->
-        <div class="add-item-box">
-          <h4>Add New Item</h4>
-          <p id="add-item-sub-desc">Category select karein upar se</p>
-          <div class="sub-select-wrap">
-            <label>Subcategory *</label>
-            <select id="sub-select">
-              <option value="">-- Select Subcategory --</option>
-            </select>
-          </div>
-          <!-- Type Toggle -->
-          <div class="type-row">
-            <button class="type-btn active" id="type-pdf" onclick="setType('pdf')">📄 PDF</button>
-            <button class="type-btn" id="type-video" onclick="setType('video')">🎥 Video</button>
-          </div>
-          <!-- Title -->
-          <div class="form-group">
-            <label>Title *</label>
-            <input type="text" id="item-title" placeholder="Content ka title likhein">
-          </div>
-          <!-- Description -->
-          <div class="form-group">
-            <label>Description</label>
-            <textarea id="item-desc" placeholder="Content ke baare mein..." style="height:70px"></textarea>
-          </div>
-          <!-- PDF Fields -->
-          <div id="pdf-fields">
-            <div class="form-group">
-              <label>PDF URL *</label>
-              <input type="url" id="pdf-url" placeholder="https://drive.google.com/...">
-            </div>
-          </div>
-          <!-- Video Fields -->
-          <div id="video-fields" style="display:none">
-            <div class="form-group">
-              <label>YouTube Video Link *</label>
-              <input type="url" id="yt-url" placeholder="https://youtube.com/watch?v=...">
-            </div>
-            <div class="form-group">
-              <label>Thumbnail URL (optional)</label>
-              <input type="url" id="thumb-url" placeholder="Auto-generate hoga YouTube se">
-            </div>
-          </div>
-          <!-- Common fields -->
-          <div class="form-row2">
-            <div class="form-group">
-              <label>Access</label>
-              <select id="item-access">
-                <option value="free">🆓 Free</option>
-                <option value="paid">💰 Paid</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Poster Image URL (optional)</label>
-              <input type="url" id="poster-url" placeholder="Image URL">
-            </div>
-          </div>
-          <div class="msg" id="add-msg"></div>
-          <button class="btn btn-primary btn-block" id="add-btn" onclick="addItem()" style="margin-bottom:20px">✅ Add Content</button>
-        </div>
-
-        <!-- Items list below -->
-        <div class="items-list" id="items-list">
-          <h4>Uploaded Content</h4>
-          <div id="items-container">
-            <div class="loading-center"><div class="big-spinner"></div> Loading...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- USERS -->
-    <div class="panel" id="panel-users">
-      <div class="acard">
-        <div class="acard-title">👥 Registered Users</div>
-        <div id="users-wrap"><div class="loading-center"><div class="big-spinner"></div> Loading...</div></div>
-      </div>
-    </div>
-
-    <!-- SLIDER -->
-    <div class="panel" id="panel-slider">
-      <div class="acard">
-        <div class="acard-title">🖼️ Slider Images</div>
-        <div class="form-group">
-          <label>New Slide Image URL</label>
-          <input type="url" id="sl-url" placeholder="https://...jpg">
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="addSlide()" style="margin-bottom:16px">+ Add Slide</button>
-        <div id="slides-wrap"></div>
-      </div>
-    </div>
-
   </div>
-</div>
 
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getDatabase,ref,get,set,push,remove}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const FC={apiKey:"AIzaSyAXvrUDLT9JosL5eE4SsXqiuGP8rmS9RYk",authDomain:"education-bd8a9.firebaseapp.com",databaseURL:"https://education-bd8a9-default-rtdb.firebaseio.com",projectId:"education-bd8a9",storageBucket:"education-bd8a9.firebasestorage.app",messagingSenderId:"44581091231",appId:"1:44581091231:android:76d10f0d2597d3b64bafaa"};
-const app=initializeApp(FC),db=getDatabase(app);
-const ADMIN_PASS='SKAdmin@2026';
+  <!-- UPLOAD PDF -->
+  <div class="a-screen" id="as-upload-pdf">
+    <div style="padding:14px 13px 0">
+      <button class="a-btn" onclick="adminGo('main')">← Back</button>
+    </div>
+    <div class="upload-card">
+      <div class="upload-card-title">📄 Upload PDF / Notes</div>
+      <div class="subj-pills" id="pdf-pills">
+        <div class="pill active" onclick="selSub('pdf','Science',this)">Science</div>
+        <div class="pill" onclick="selSub('pdf','Mathematics',this)">Mathematics</div>
+        <div class="pill" onclick="selSub('pdf','Hindi',this)">Hindi</div>
+        <div class="pill" onclick="selSub('pdf','Sanskrit',this)">Sanskrit</div>
+        <div class="pill" onclick="selSub('pdf','Social Studies',this)">Social Studies</div>
+        <div class="pill" onclick="selSub('pdf','English',this)">English</div>
+      </div>
+      <select class="form-input form-select" id="pdf-sub">
+        <option value="">-- Select Subcategory --</option>
+        <option>Physics</option><option>Chemistry</option><option>Biology</option>
+      </select>
+      <div class="type-row">
+        <button class="type-btn active" id="tb-paid" onclick="selType('paid')">🔒 Paid</button>
+        <button class="type-btn" id="tb-free" onclick="selType('free')">🆓 Free</button>
+      </div>
+      <input class="form-input" id="pdf-title" placeholder="Title *" style="margin-bottom:10px">
+      <textarea class="form-input" id="pdf-desc" placeholder="Description (optional)" style="margin-bottom:10px"></textarea>
+      <input class="form-input" id="pdf-url" placeholder="PDF URL * (https://...)" style="margin-bottom:14px">
+      <button class="btn btn-primary" onclick="uploadPDF()">📤 Upload PDF</button>
+      <div class="alert alert-success" id="pdf-success" style="margin-top:10px"></div>
+    </div>
+  </div>
 
-// Sub-categories per main category
-const SUBCATS={
-  Hindi:['Objective','Subjective','Notes'],
-  Sanskrit:['Objective','Subjective','Notes'],
-  Math:['Objective','Subjective','Notes'],
-  Science:['Physics','Chemistry','Biology','Notes'],
-  History:['Objective','Subjective','Notes'],
-  'Social Science':['Objective','Subjective','Notes'],
-  English:['Objective','Subjective','Notes'],
-  Urdu:['Objective','Subjective','Notes'],
-  NCERT:['Hindi','Sanskrit','Math','Science','History','Social Science','English','Urdu']
-};
-const CATS=Object.keys(SUBCATS);
-let activeCat=CATS[0];
-let activeType='pdf';
-let allItems=[];
+  <!-- UPLOAD VIDEO -->
+  <div class="a-screen" id="as-upload-video">
+    <div style="padding:14px 13px 0">
+      <button class="a-btn" onclick="adminGo('main')">← Back</button>
+    </div>
+    <div class="upload-card">
+      <div class="upload-card-title">🎬 Upload Video Lecture</div>
+      <div class="subj-pills" id="vid-pills">
+        <div class="pill active" onclick="selSub('vid','Science',this)">Science</div>
+        <div class="pill" onclick="selSub('vid','Mathematics',this)">Mathematics</div>
+        <div class="pill" onclick="selSub('vid','Hindi',this)">Hindi</div>
+        <div class="pill" onclick="selSub('vid','Sanskrit',this)">Sanskrit</div>
+        <div class="pill" onclick="selSub('vid','Social Studies',this)">Social Studies</div>
+        <div class="pill" onclick="selSub('vid','English',this)">English</div>
+      </div>
+      <select class="form-input form-select" id="vid-sub">
+        <option value="">-- Select Subcategory --</option>
+        <option>Physics</option><option>Chemistry</option><option>Biology</option>
+      </select>
+      <input class="form-input" id="vid-title" placeholder="Video Title *" style="margin-bottom:10px">
+      <textarea class="form-input" id="vid-desc" placeholder="Description (optional)" style="margin-bottom:10px"></textarea>
+      <input class="form-input" id="vid-url" placeholder="YouTube / Video URL *" style="margin-bottom:14px">
+      <button class="btn btn-primary" onclick="uploadVideo()">📤 Upload Video</button>
+      <div class="alert alert-success" id="vid-success" style="margin-top:10px"></div>
+    </div>
+  </div>
 
-// ---- PASSWORD ----
-window.checkPw=()=>{
-  const v=document.getElementById('pw-in').value;
-  if(v===ADMIN_PASS){
-    document.getElementById('pw-screen').style.display='none';
-    document.getElementById('admin-wrap').style.display='block';
-    init();
-  }else{
-    document.getElementById('pw-err').textContent='Galat password!';
-    document.getElementById('pw-in').value='';
-    document.getElementById('pw-in').focus();
+  <!-- NOTIFICATIONS -->
+  <div class="a-screen" id="as-notifications">
+    <div style="padding:14px 13px 0">
+      <button class="a-btn" onclick="adminGo('main')">← Back</button>
+    </div>
+    <div class="upload-card">
+      <div class="upload-card-title">🔔 Send Notification</div>
+      <input class="form-input" id="n-title" placeholder="Notification Title *" style="margin-bottom:10px">
+      <textarea class="form-input" id="n-body" placeholder="Message to all students..." style="min-height:100px;margin-bottom:14px"></textarea>
+      <button class="btn btn-primary" onclick="sendNotif()">📢 Send to All Students</button>
+      <div class="alert alert-success" id="notif-success" style="margin-top:10px"></div>
+    </div>
+    <div class="sec-title">Sent Notifications</div>
+    <div id="notif-sent-list"></div>
+  </div>
+
+  <!-- ALL STUDENTS -->
+  <div class="a-screen" id="as-users">
+    <div style="padding:14px 13px 0;display:flex;align-items:center;justify-content:space-between">
+      <button class="a-btn" onclick="adminGo('main')" style="margin-bottom:0">← Back</button>
+      <div style="font-size:13px;color:var(--muted)" id="user-count-label"></div>
+    </div>
+    <div style="padding:0 13px 10px">
+      <input class="form-input" id="user-search" placeholder="🔍 Search by name or phone..." oninput="filterUsers()" style="margin-top:8px">
+    </div>
+    <div id="users-list"></div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="a-screen" id="as-chat">
+    <div style="padding:14px 13px 0">
+      <button class="a-btn" onclick="adminGo('main')">← Back</button>
+    </div>
+    <div id="chat-threads"></div>
+  </div>
+
+  <!-- MANAGE CONTENT -->
+  <div class="a-screen" id="as-manage-content">
+    <div style="padding:14px 13px 0">
+      <button class="a-btn" onclick="adminGo('main')">← Back</button>
+    </div>
+    <div class="content-tabs">
+      <div class="ctab active" id="mc-pdf" onclick="switchMgTab('pdf')">📄 PDFs</div>
+      <div class="ctab" id="mc-vid" onclick="switchMgTab('video')">🎬 Videos</div>
+    </div>
+    <div id="manage-content-list" style="padding-top:8px"></div>
+  </div>
+
+  <!-- FREE NOTES -->
+  <div class="a-screen" id="as-free-notes">
+    <div style="padding:14px 13px 0">
+      <button class="a-btn" onclick="adminGo('main')">← Back</button>
+    </div>
+    <div class="upload-card">
+      <div class="upload-card-title">📝 Add Free Notes</div>
+      <input class="form-input" id="fn-title" placeholder="Title *" style="margin-bottom:10px">
+      <input class="form-input" id="fn-url" placeholder="PDF URL *" style="margin-bottom:14px">
+      <button class="btn btn-primary" onclick="addFreeNote()">Add Free Note</button>
+      <div class="alert alert-success" id="fn-success" style="margin-top:10px"></div>
+    </div>
+    <div class="sec-title">Free Notes</div>
+    <div id="fn-list"></div>
+  </div>
+
+  <!-- FREE TESTS -->
+  <div class="a-screen" id="as-free-tests">
+    <div style="padding:14px 13px 0">
+      <button class="a-btn" onclick="adminGo('main')">← Back</button>
+    </div>
+    <div class="upload-card">
+      <div class="upload-card-title">✅ Add Free Test</div>
+      <input class="form-input" id="ft-title" placeholder="Test Title *" style="margin-bottom:10px">
+      <input class="form-input" id="ft-url" placeholder="PDF / Test URL *" style="margin-bottom:14px">
+      <button class="btn btn-primary" onclick="addFreeTest()">Add Free Test</button>
+      <div class="alert alert-success" id="ft-success" style="margin-top:10px"></div>
+    </div>
+    <div class="sec-title">Free Tests</div>
+    <div id="ft-list"></div>
+  </div>
+
+  <!-- TIMETABLE -->
+  <div class="a-screen" id="as-timetable">
+    <div style="padding:14px 13px 0">
+      <button class="a-btn" onclick="adminGo('main')">← Back</button>
+    </div>
+    <div class="upload-card">
+      <div class="upload-card-title">📅 Upload Timetable</div>
+      <input class="form-input" id="tt-title" placeholder="e.g. March 2026 Timetable *" style="margin-bottom:10px">
+      <input class="form-input" id="tt-url" placeholder="Image / PDF URL *" style="margin-bottom:14px">
+      <button class="btn btn-primary" onclick="addTimetable()">Upload Timetable</button>
+      <div class="alert alert-success" id="tt-success" style="margin-top:10px"></div>
+    </div>
+    <div class="sec-title">Timetables</div>
+    <div id="tt-list"></div>
+  </div>
+
+</div><!-- end admin-dash -->
+
+<div class="toast-wrap"><div class="toast" id="sk-toast"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="shared.js"></script>
+<script>
+const ADMIN_PASS = 'saten@12345';
+let allUsers = {};
+let pdfSub = 'Science', vidSub = 'Science', pdfType = 'paid';
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', () => {
+  applyTheme();
+  const u = getUser();
+  if (u && u.isAdmin) showDash();
+  loadLogo(document.getElementById('al-logo'));
+  loadLogo(document.getElementById('ad-logo'));
+});
+
+function doAdminLogin() {
+  const pw = document.getElementById('admin-pw').value;
+  const err = document.getElementById('admin-err');
+  const btn = document.getElementById('admin-login-btn');
+  if (pw === ADMIN_PASS) {
+    setUser({ isAdmin: true, name: 'Admin' });
+    showDash();
+  } else {
+    err.textContent = 'Incorrect password!'; err.style.display = 'block';
+    btn.textContent = 'Login as Admin'; btn.disabled = false;
   }
-};
+}
 
-function init(){
+function showDash() {
+  document.getElementById('admin-login').style.display = 'none';
+  document.getElementById('admin-dash').style.display = 'block';
+  document.body.classList.remove('admin-bg');
+  document.body.style.background = 'var(--bg)';
   loadStats();
-  buildCatTabs();
-  loadItems();
-  loadSlides();
 }
 
-// ---- TABS ----
-window.showTab=(tab,btn)=>{
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+tab).classList.add('active');
-  btn.classList.add('active');
-  if(tab==='users')loadUsers();
-  if(tab==='slider')loadSlides();
-  if(tab==='courses'){loadItems();}
-};
-
-// ---- STATS ----
-async function loadStats(){
-  try{
-    const[uSnap,cSnap]=await Promise.all([get(ref(db,'users')),get(ref(db,'courses'))]);
-    const uc=uSnap.exists()?Object.keys(uSnap.val()).length:0;
-    let tc=0,fc=0,pc=0;
-    if(cSnap.exists()){Object.values(cSnap.val()).forEach(c=>{if(c.contentType==='video'||c.contentType==='pdf'){tc++;if(c.isFree)fc++;else pc++;}});}
-    document.getElementById('st-u').textContent=uc;
-    document.getElementById('st-c').textContent=tc;
-    document.getElementById('st-f').textContent=fc;
-    document.getElementById('st-p').textContent=pc;
-  }catch(e){}
+function doAdminLogout() {
+  clearUser();
+  document.getElementById('admin-dash').style.display = 'none';
+  document.getElementById('admin-login').style.display = 'block';
+  document.body.classList.add('admin-bg');
+  document.getElementById('admin-pw').value = '';
 }
 
-// ---- CATEGORY TABS ----
-function buildCatTabs(){
-  const wrap=document.getElementById('cat-tabs');
-  wrap.innerHTML=CATS.map(cat=>`<button class="ct${cat===activeCat?' active':''}" onclick="selectCat('${cat}')">${cat}</button>`).join('');
-  updateSubSelect();
-  document.getElementById('add-item-sub-desc').textContent=activeCat+' ke liye content add karein';
-}
-window.selectCat=(cat)=>{
-  activeCat=cat;
-  document.querySelectorAll('.ct').forEach(b=>b.classList.toggle('active',b.textContent===cat));
-  document.getElementById('add-item-sub-desc').textContent=cat+' ke liye content add karein';
-  updateSubSelect();
-  renderItems();
-};
-function updateSubSelect(){
-  const sel=document.getElementById('sub-select');
-  const subs=SUBCATS[activeCat]||['Notes'];
-  sel.innerHTML='<option value="">-- Select Subcategory --</option>'+subs.map(s=>`<option value="${s}">${s}</option>`).join('');
+// ===== NAVIGATION =====
+const aScreens = ['main','upload-pdf','upload-video','notifications','users','chat','manage-content','free-notes','free-tests','timetable'];
+function adminGo(name) {
+  aScreens.forEach(s => {
+    const el = document.getElementById('as-'+s);
+    if (el) el.classList.toggle('active', s === name);
+  });
+  if (name === 'users') loadUsers();
+  if (name === 'chat') loadChats();
+  if (name === 'manage-content') loadManageContent('pdf');
+  if (name === 'notifications') loadSentNotifs();
+  if (name === 'free-notes') loadFreeItems('free_notes','fn-list');
+  if (name === 'free-tests') loadFreeItems('free_tests','ft-list');
+  if (name === 'timetable') loadFreeItems('timetable','tt-list');
 }
 
-// ---- TYPE TOGGLE ----
-window.setType=(type)=>{
-  activeType=type;
-  document.getElementById('type-pdf').classList.toggle('active',type==='pdf');
-  document.getElementById('type-video').classList.toggle('active',type==='video');
-  document.getElementById('pdf-fields').style.display=type==='pdf'?'block':'none';
-  document.getElementById('video-fields').style.display=type==='video'?'block':'none';
-};
-
-// ---- LOAD ITEMS ----
-async function loadItems(){
-  try{
-    const snap=await get(ref(db,'courses'));
-    if(!snap.exists()){allItems=[];}
-    else{allItems=Object.entries(snap.val()).filter(([_,c])=>c.contentType==='video'||c.contentType==='pdf');}
-    renderItems();
-  }catch(e){}
+// ===== STATS =====
+async function loadStats() {
+  const [users, content, chats] = await Promise.all([
+    fbGet('users'), fbGet('course_content'), fbGet('chats')
+  ]);
+  document.getElementById('stat-users').textContent = users ? Object.keys(users).length : 0;
+  let cnt = 0;
+  if (content) {
+    const course = content.dream465 || {};
+    cnt += Object.keys(course.pdf||{}).length + Object.keys(course.video||{}).length;
+  }
+  document.getElementById('stat-content').textContent = cnt;
+  document.getElementById('stat-msgs').textContent = chats ? Object.keys(chats).length : 0;
 }
-function renderItems(){
-  const con=document.getElementById('items-container');
-  const filtered=allItems.filter(([_,c])=>c.category===activeCat);
-  if(!filtered.length){con.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">'+activeCat+' mein abhi koi content nahi hai</div>';return;}
-  con.innerHTML=filtered.map(([id,c])=>`
-    <div class="item-row">
-      <div class="item-ico">${c.contentType==='video'?'🎥':'📄'}</div>
-      <div class="item-info">
-        <div class="item-title">${c.title||'Untitled'}</div>
-        <div class="item-meta">${c.category||''} → ${c.subcategory||''} &nbsp;•&nbsp; ${c.isFree?'🆓 Free':'💰 Paid'} &nbsp;•&nbsp; ${c.contentType==='video'?'YouTube':'PDF'}</div>
-        ${c.youtubeLink?`<a class="item-link" href="${c.youtubeLink}" target="_blank">${c.youtubeLink.substring(0,55)}...</a>`:''}
-        ${c.pdfUrl?`<a class="item-link" href="${c.pdfUrl}" target="_blank">${c.pdfUrl.substring(0,55)}...</a>`:''}
+
+// ===== SUBJECT / TYPE SELECTORS =====
+function selSub(form, sub, el) {
+  if (form==='pdf') pdfSub=sub; else vidSub=sub;
+  el.closest('.subj-pills').querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  const subMap = {
+    'Science':['Physics','Chemistry','Biology'],
+    'Mathematics':['Algebra','Geometry','Arithmetic','Trigonometry'],
+    'Hindi':['Gadya','Padya','Vyakaran'],
+    'Sanskrit':['Gadya','Padya','Vyakaran'],
+    'Social Studies':['History','Geography','Civics','Economics'],
+    'English':['Grammar','Prose','Poetry','Writing']
+  };
+  const id = form==='pdf' ? 'pdf-sub' : 'vid-sub';
+  const sel = document.getElementById(id);
+  sel.innerHTML = '<option value="">-- Select Subcategory --</option>' + (subMap[sub]||[]).map(o=>`<option>${o}</option>`).join('');
+}
+
+function selType(t) {
+  pdfType = t;
+  document.getElementById('tb-paid').classList.toggle('active', t==='paid');
+  document.getElementById('tb-free').classList.toggle('active', t==='free');
+}
+
+// ===== UPLOAD PDF =====
+async function uploadPDF() {
+  const title = document.getElementById('pdf-title').value.trim();
+  const url = document.getElementById('pdf-url').value.trim();
+  const desc = document.getElementById('pdf-desc').value.trim();
+  const sub = document.getElementById('pdf-sub').value;
+  if (!title) return showToast('❌ Title is required');
+  if (!url || !url.startsWith('http')) return showToast('❌ Valid URL is required');
+  const data = { title, url, desc, subject: pdfSub, subcategory: sub, type: pdfType, ts: Date.now() };
+  await fbPush(`course_content/dream465/pdf`, data);
+  // also add to paid/free notes
+  if (pdfType === 'free') await fbPush('free_notes', data);
+  else await fbPush('paid_notes', data);
+  showSuccessMsg('pdf-success', '✅ PDF uploaded successfully!');
+  document.getElementById('pdf-title').value = '';
+  document.getElementById('pdf-url').value = '';
+  document.getElementById('pdf-desc').value = '';
+  loadStats();
+}
+
+// ===== UPLOAD VIDEO =====
+async function uploadVideo() {
+  const title = document.getElementById('vid-title').value.trim();
+  const url = document.getElementById('vid-url').value.trim();
+  const desc = document.getElementById('vid-desc').value.trim();
+  const sub = document.getElementById('vid-sub').value;
+  if (!title) return showToast('❌ Title is required');
+  if (!url || !url.startsWith('http')) return showToast('❌ Valid URL is required');
+  const data = { title, url, desc, subject: vidSub, subcategory: sub, ts: Date.now() };
+  await fbPush(`course_content/dream465/video`, data);
+  showSuccessMsg('vid-success', '✅ Video uploaded successfully!');
+  document.getElementById('vid-title').value = '';
+  document.getElementById('vid-url').value = '';
+  document.getElementById('vid-desc').value = '';
+  loadStats();
+}
+
+// ===== NOTIFICATION =====
+async function sendNotif() {
+  const title = document.getElementById('n-title').value.trim();
+  const body = document.getElementById('n-body').value.trim();
+  if (!title || !body) return showToast('❌ Fill both title and message');
+  await fbPush('notifications', { title, body, ts: Date.now() });
+  showSuccessMsg('notif-success', '✅ Notification sent to all students!');
+  document.getElementById('n-title').value = '';
+  document.getElementById('n-body').value = '';
+  loadSentNotifs();
+}
+
+async function loadSentNotifs() {
+  const data = await fbGet('notifications');
+  const el = document.getElementById('notif-sent-list');
+  if (!data) { el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">No notifications sent yet</div>'; return; }
+  el.innerHTML = Object.entries(data).reverse().map(([k,n]) => `
+    <div class="notif-item" style="margin:0 13px 10px">
+      <div style="display:flex;justify-content:space-between;align-items:start">
+        <div class="notif-item-title">${n.title}</div>
+        <button onclick="deleteItem('notifications/${k}','notif-sent-list',loadSentNotifs)" class="del-btn" title="Delete">🗑</button>
       </div>
-      <button class="del-btn" onclick="delItem('${id}')">Delete</button>
+      <div class="notif-item-body">${n.body}</div>
+      <div class="notif-item-date">${new Date(n.ts).toLocaleString('en-IN')}</div>
     </div>`).join('');
 }
 
-// ---- ADD ITEM ----
-window.addItem=async()=>{
-  const title=document.getElementById('item-title').value.trim();
-  const sub=document.getElementById('sub-select').value;
-  const desc=document.getElementById('item-desc').value.trim();
-  const isFree=document.getElementById('item-access').value==='free';
-  const poster=document.getElementById('poster-url').value.trim();
-  const msgEl=document.getElementById('add-msg');
-  const showMsg=(t,type)=>{msgEl.textContent=t;msgEl.className='msg show '+(type==='err'?'msg-error':'msg-success');};
-  if(!title){showMsg('Title zarur bharein','err');return;}
-  if(!sub){showMsg('Subcategory select karein','err');return;}
-  let data={title,category:activeCat,subcategory:sub,description:desc,isFree,posterUrl:poster,createdAt:new Date().toISOString()};
-  if(activeType==='pdf'){
-    const pdfUrl=document.getElementById('pdf-url').value.trim();
-    if(!pdfUrl){showMsg('PDF URL bharein (Google Drive link)','err');return;}
-    data.contentType='pdf';data.pdfUrl=pdfUrl;
-  }else{
-    const ytUrl=document.getElementById('yt-url').value.trim();
-    const thumbUrl=document.getElementById('thumb-url').value.trim();
-    if(!ytUrl){showMsg('YouTube link bharein','err');return;}
-    data.contentType='video';data.youtubeLink=ytUrl;
-    // Auto-generate thumbnail
-    let thumb=thumbUrl;
-    if(!thumb){
-      try{let vid='';if(ytUrl.includes('v='))vid=ytUrl.split('v=')[1].split('&')[0];else if(ytUrl.includes('youtu.be/'))vid=ytUrl.split('youtu.be/')[1].split('?')[0];if(vid)thumb='https://img.youtube.com/vi/'+vid+'/mqdefault.jpg';}catch{}
-    }
-    data.thumbnail=thumb;
-    if(!data.posterUrl&&thumb)data.posterUrl=thumb;
+// ===== USERS =====
+async function loadUsers() {
+  const el = document.getElementById('users-list');
+  el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Loading...</div>';
+  const data = await fbGet('users');
+  allUsers = data || {};
+  const count = Object.keys(allUsers).length;
+  document.getElementById('user-count-label').textContent = count + ' students';
+  renderUsers(Object.values(allUsers));
+}
+
+function filterUsers() {
+  const q = document.getElementById('user-search').value.toLowerCase();
+  const filtered = Object.values(allUsers).filter(u =>
+    u.name?.toLowerCase().includes(q) || u.phone?.includes(q) || u.email?.toLowerCase().includes(q)
+  );
+  renderUsers(filtered);
+}
+
+function renderUsers(list) {
+  const el = document.getElementById('users-list');
+  if (!list.length) { el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No students found</div>'; return; }
+  el.innerHTML = list.map(u => `
+    <div class="user-item">
+      <div class="user-item-head">
+        <div>
+          <div class="user-item-name">👤 ${u.name}</div>
+          <div class="user-item-info">
+            📱 ${u.phone}<br>
+            📧 ${u.email}<br>
+            📅 Joined: ${new Date(u.joinDate||Date.now()).toLocaleDateString('en-IN')} • Class ${u.class||'10'}th
+          </div>
+        </div>
+      </div>
+      <div class="user-item-actions">
+        <button class="small-btn small-btn-blue" onclick='downloadUserID(${JSON.stringify(u)})'>📥 Download ID</button>
+        <button class="small-btn small-btn-green" onclick="deleteUser('${u.uid}')">🗑 Remove</button>
+      </div>
+    </div>`).join('');
+}
+
+function downloadUserID(u) { generateIDCard(u); showToast('Downloading ID card...'); }
+async function deleteUser(uid) {
+  if (!confirm('Remove this student?')) return;
+  await fbDel(`users/${uid}`);
+  showToast('Student removed');
+  loadUsers();
+}
+
+// ===== CHATS =====
+async function loadChats() {
+  const el = document.getElementById('chat-threads');
+  el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Loading chats...</div>';
+  const data = await fbGet('chats');
+  if (!data) { el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No messages yet</div>'; return; }
+  const grouped = {};
+  Object.entries(data).forEach(([k, m]) => {
+    const uid = m.userId || 'guest';
+    if (!grouped[uid]) grouped[uid] = { name: m.userName || 'Unknown', msgs: [], keys: [] };
+    grouped[uid].msgs.push(m);
+    grouped[uid].keys.push(k);
+  });
+  el.innerHTML = Object.entries(grouped).map(([uid, g]) => {
+    const sorted = g.msgs.sort((a,b)=>a.ts-b.ts);
+    return `<div class="chat-thread">
+      <div class="chat-thread-head">
+        <span class="chat-thread-name">👤 ${g.name}</span>
+        <span style="font-size:12px;color:var(--muted)">${sorted.length} messages</span>
+      </div>
+      <div class="chat-thread-msgs">
+        ${sorted.map(m => `<div style="align-self:${m.role==='user'?'flex-end':'flex-start'};max-width:80%">
+          <div style="padding:7px 11px;border-radius:12px;font-size:13px;background:${m.role==='user'?'#dbeafe':'#d1fae5'};color:#1e1e2d;">${m.text}</div>
+          <div style="font-size:10px;color:#9ca3af;margin-top:2px;${m.role==='user'?'text-align:right':''}">${new Date(m.ts).toLocaleTimeString('hi-IN',{hour:'2-digit',minute:'2-digit'})}</div>
+        </div>`).join('')}
+      </div>
+      <div class="chat-thread-bar">
+        <input class="admin-reply-inp" id="reply-${uid}" placeholder="Reply to ${g.name}..." onkeydown="if(event.key==='Enter')adminReply('${uid}','${g.name}')">
+        <button class="reply-send-btn" onclick="adminReply('${uid}','${g.name}')">Send</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function adminReply(uid, name) {
+  const inp = document.getElementById('reply-' + uid);
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  await fbPush('chats', { text, role: 'admin', userId: uid, userName: 'Admin', ts: Date.now() });
+  showToast('Reply sent to ' + name + ' ✅');
+  loadChats();
+}
+
+// ===== MANAGE CONTENT =====
+async function loadManageContent(tab) {
+  switchMgTab(tab);
+}
+async function switchMgTab(tab) {
+  document.getElementById('mc-pdf').classList.toggle('active', tab==='pdf');
+  document.getElementById('mc-vid').classList.toggle('active', tab==='video');
+  const el = document.getElementById('manage-content-list');
+  el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Loading...</div>';
+  const data = await fbGet(`course_content/dream465/${tab}`);
+  if (!data || !Object.keys(data).length) {
+    el.innerHTML = '<div class="empty-state"><div class="emoji">📂</div><h3>No content yet</h3><p>Upload from Upload PDF/Video section</p></div>';
+    return;
   }
-  const btn=document.getElementById('add-btn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Adding...';
-  try{
-    await push(ref(db,'courses'),data);
-    showMsg('Content add ho gaya! ✅','suc');
-    // Clear form
-    document.getElementById('item-title').value='';
-    document.getElementById('item-desc').value='';
-    document.getElementById('pdf-url').value='';
-    document.getElementById('yt-url').value='';
-    document.getElementById('thumb-url').value='';
-    document.getElementById('poster-url').value='';
-    document.getElementById('sub-select').value='';
-    await loadItems();
-    loadStats();
-  }catch(e){showMsg('Error: '+e.message,'err');}
-  btn.disabled=false;btn.textContent='✅ Add Content';
-};
-
-// ---- DELETE ----
-window.delItem=async(id)=>{
-  if(!confirm('Delete karna chahte hain?'))return;
-  try{await remove(ref(db,'courses/'+id));await loadItems();loadStats();}
-  catch(e){alert('Delete fail: '+e.message);}
-};
-
-// ---- USERS ----
-async function loadUsers(){
-  const wrap=document.getElementById('users-wrap');
-  try{
-    const snap=await get(ref(db,'users'));
-    if(!snap.exists()){wrap.innerHTML='<div class="empty-state">Koi user nahi hai abhi</div>';return;}
-    const list=Object.entries(snap.val());
-    wrap.innerHTML=`<div style="overflow-x:auto"><table class="utbl">
-      <thead><tr><th>#</th><th>Naam</th><th>Email</th><th>Mobile</th><th>Registered</th></tr></thead>
-      <tbody>${list.map(([id,u],i)=>`<tr>
-        <td>${i+1}</td><td>${u.name||'-'}</td><td>${u.email||'-'}</td>
-        <td>${u.phone||'-'}</td>
-        <td>${u.registeredAt?new Date(u.registeredAt).toLocaleDateString('en-IN'):'-'}</td>
-      </tr>`).join('')}</tbody>
-    </table></div>
-    <div style="font-size:12px;color:var(--muted);margin-top:8px;padding:4px 0">Total: ${list.length} users</div>`;
-  }catch(e){wrap.innerHTML='<div style="color:red">Error: '+e.message+'</div>';}
+  el.innerHTML = Object.entries(data).sort((a,b)=>b[1].ts-a[1].ts).map(([k,item]) => `
+    <div class="content-item">
+      <div style="font-size:20px">${tab==='pdf'?'📄':'🎬'}</div>
+      <div class="content-item-info">
+        <div class="content-item-title">${item.title}</div>
+        <div class="content-item-sub">${item.subject||''} ${item.subcategory?'• '+item.subcategory:''} ${item.type?'• '+item.type:''}</div>
+      </div>
+      <button class="del-btn" onclick="deleteContent('${k}','${tab}')" title="Delete">🗑</button>
+    </div>`).join('');
 }
 
-// ---- SLIDER ----
-async function loadSlides(){
-  const wrap=document.getElementById('slides-wrap');
-  try{
-    const snap=await get(ref(db,'slider'));
-    if(!snap.exists()||!Object.keys(snap.val()).length){wrap.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Koi slide nahi hai</div>';return;}
-    wrap.innerHTML=Object.entries(snap.val()).map(([id,s])=>`
-      <div class="slide-item">
-        <img class="slide-img" src="${s.url||s}" alt="">
-        <div class="slide-url">${s.url||s}</div>
-        <button class="del-slide" onclick="delSlide('${id}')">Delete</button>
-      </div>`).join('');
-  }catch(e){}
+async function deleteContent(key, tab) {
+  if (!confirm('Delete this item?')) return;
+  await fbDel(`course_content/dream465/${tab}/${key}`);
+  showToast('Deleted ✅');
+  switchMgTab(tab);
+  loadStats();
 }
-window.addSlide=async()=>{
-  const url=document.getElementById('sl-url').value.trim();
-  if(!url){alert('Image URL bharein');return;}
-  try{await push(ref(db,'slider'),{url});document.getElementById('sl-url').value='';loadSlides();}
-  catch(e){alert('Error: '+e.message);}
-};
-window.delSlide=async(id)=>{
-  if(!confirm('Slide delete karein?'))return;
-  try{await remove(ref(db,'slider/'+id));loadSlides();}
-  catch(e){alert('Error: '+e.message);}
-};
+
+// ===== FREE NOTES / TESTS / TIMETABLE =====
+async function addFreeNote() {
+  const t = document.getElementById('fn-title').value.trim();
+  const u = document.getElementById('fn-url').value.trim();
+  if (!t || !u) return showToast('Fill all fields');
+  await fbPush('free_notes', { title:t, url:u, ts:Date.now() });
+  showSuccessMsg('fn-success', '✅ Free note added!');
+  document.getElementById('fn-title').value = ''; document.getElementById('fn-url').value = '';
+  loadFreeItems('free_notes','fn-list');
+}
+async function addFreeTest() {
+  const t = document.getElementById('ft-title').value.trim();
+  const u = document.getElementById('ft-url').value.trim();
+  if (!t || !u) return showToast('Fill all fields');
+  await fbPush('free_tests', { title:t, url:u, ts:Date.now() });
+  showSuccessMsg('ft-success', '✅ Free test added!');
+  document.getElementById('ft-title').value = ''; document.getElementById('ft-url').value = '';
+  loadFreeItems('free_tests','ft-list');
+}
+async function addTimetable() {
+  const t = document.getElementById('tt-title').value.trim();
+  const u = document.getElementById('tt-url').value.trim();
+  if (!t || !u) return showToast('Fill all fields');
+  await fbPush('timetable', { title:t, url:u, ts:Date.now() });
+  showSuccessMsg('tt-success', '✅ Timetable uploaded!');
+  document.getElementById('tt-title').value = ''; document.getElementById('tt-url').value = '';
+  loadFreeItems('timetable','tt-list');
+}
+
+async function loadFreeItems(path, elId) {
+  const el = document.getElementById(elId);
+  const data = await fbGet(path);
+  if (!data) { el.innerHTML = '<div style="padding:16px;text-align:center;color:var(--muted);font-size:13px">Nothing added yet</div>'; return; }
+  el.innerHTML = Object.entries(data).sort((a,b)=>b[1].ts-a[1].ts).map(([k,item]) => `
+    <div class="content-item">
+      <div style="font-size:20px">📄</div>
+      <div class="content-item-info">
+        <div class="content-item-title">${item.title}</div>
+        <div class="content-item-sub">${new Date(item.ts).toLocaleDateString('en-IN')}</div>
+      </div>
+      <button class="del-btn" onclick="deleteItem('${path}/${k}','${elId}',()=>loadFreeItems('${path}','${elId}'))">🗑</button>
+    </div>`).join('');
+}
+
+// ===== UTILS =====
+async function deleteItem(path, elId, reload) {
+  if (!confirm('Delete this item?')) return;
+  await fbDel(path);
+  showToast('Deleted ✅');
+  if (reload) reload();
+}
+
+function showSuccessMsg(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3500);
+}
 </script>
 </body>
 </html>

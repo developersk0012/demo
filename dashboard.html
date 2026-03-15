@@ -2,228 +2,509 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SK Education – Home</title>
-<link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>SK Education</title>
+<link rel="stylesheet" href="style.css">
 <style>
-body{padding-bottom:76px;background:var(--bg)}
-.main-header{background:linear-gradient(135deg,var(--pri-dark) 0%,var(--pri) 60%,var(--pri-light) 100%);color:#fff;position:sticky;top:0;z-index:200;box-shadow:0 3px 18px rgba(26,35,126,.35)}
-.header-top{display:flex;align-items:center;gap:10px;padding:12px 16px 8px}
-.site-name-block .sn{font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;line-height:1}
-.site-name-block .ss{font-size:10px;opacity:.75;letter-spacing:.3px}
-.header-greeting{padding:0 16px 12px}
-.greet-hi{font-size:12px;opacity:.8}
-.greet-name{font-size:18px;font-weight:700}
-/* Slider */
-.slider-wrap{position:relative;height:180px;overflow:hidden;background:linear-gradient(135deg,var(--pri),var(--acc));flex-shrink:0}
-.slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s}
-.slide.active{opacity:1}
-.slide-default{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;gap:8px}
-.slide-default .sdi{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.slider-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:2}
-.sdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;transition:all .2s}
-.sdot.active{background:#fff;width:20px;border-radius:3.5px}
-/* Section */
-.sec-header{display:flex;align-items:center;padding:16px 16px 8px}
-.sec-title{font-size:15px;font-weight:700;color:var(--pri)}
-.sec-more{margin-left:auto;font-size:12px;color:var(--acc);font-weight:700}
-/* Menu Grid */
-.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 14px 4px}
-.mi{background:var(--card);border-radius:14px;padding:14px 6px 12px;text-align:center;cursor:pointer;box-shadow:var(--shadow);border:1.5px solid transparent;transition:all .18s;text-decoration:none;display:block;position:relative;-webkit-tap-highlight-color:transparent}
-.mi:active{border-color:var(--pri);transform:scale(.96)}
-.mi-ico{font-size:28px;display:block;margin-bottom:5px}
-.mi-lbl{font-size:11px;font-weight:600;color:var(--text);line-height:1.3}
-.free-dot{position:absolute;top:6px;right:6px;background:#4caf50;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:8px}
-/* Horizontal scroll cards */
-.h-scroll{display:flex;gap:12px;padding:4px 14px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.h-scroll::-webkit-scrollbar{display:none}
-.c-card{min-width:160px;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;flex-shrink:0;transition:all .18s}
-.c-card:active{transform:scale(.97)}
-.c-thumb{width:100%;height:100px;object-fit:cover;display:block}
-.c-fall{width:100%;height:100px;display:flex;align-items:center;justify-content:center;font-size:36px;background:linear-gradient(135deg,#e8eaf6,#c5cae9)}
-.c-body{padding:10px}
-.c-cat{font-size:9px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:1px}
-.c-title{font-size:12px;font-weight:700;color:var(--text);margin:3px 0 5px;line-height:1.3}
-.open-btn-sm{display:block;width:100%;padding:7px;background:var(--pri);color:#fff;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif}
-/* Side Menu */
-.side-overlay{display:none;position:fixed;inset:0;z-index:600}
-.side-overlay.open{display:block}
-.side-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.5)}
-.side-panel{position:absolute;right:0;top:0;bottom:0;width:270px;background:#fff;overflow-y:auto;animation:sideIn .25s ease;display:flex;flex-direction:column}
-@keyframes sideIn{from{transform:translateX(100%)}to{transform:none}}
-.side-head{background:linear-gradient(135deg,var(--pri),var(--pri-light));padding:36px 18px 20px;color:#fff}
-.side-av{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;margin-bottom:10px}
-.side-name{font-size:16px;font-weight:700}
-.side-email{font-size:11px;opacity:.75;margin-top:2px;word-break:break-all}
-.side-nav{padding:8px 0}
-.sl{display:flex;align-items:center;gap:12px;padding:13px 18px;color:var(--text);font-size:14px;font-weight:500;transition:background .15s;text-decoration:none;border:none;background:none;width:100%;font-family:'Poppins',sans-serif;cursor:pointer}
-.sl:hover{background:#f0f2ff}
-.sl .si{font-size:18px;width:26px;text-align:center}
-.sl.red{color:var(--danger)}
-.sl-div{height:1px;background:#f0f0f0;margin:4px 0}
+.app-shell { display:flex; flex-direction:column; height:100vh; }
+.screen { display:none; flex:1; flex-direction:column; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* HOME BANNER */
+.home-banner { width:100%; height:158px; object-fit:cover; display:block; }
+.home-banner-fallback {
+  width:100%; height:158px; background:linear-gradient(135deg,#0d1117 0%,#1a2744 40%,#1a73e8 80%,#ff6b35 100%);
+  display:flex; align-items:center; justify-content:center; color:#fff; text-align:center;
+  font-family:'Baloo 2',sans-serif; position:relative; overflow:hidden;
+}
+.home-banner-fallback::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at 70% 50%, rgba(255,107,53,.3) 0%, transparent 60%);
+}
+.banner-inner { z-index:1; }
+.banner-inner h2 { font-size:26px; font-weight:900; line-height:1; }
+.banner-inner p { font-size:12px; opacity:.85; margin-top:4px; }
+
+/* COURSE CONTENT */
+.subheader { background:var(--card); padding:10px 14px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.subheader-logo { flex-shrink:0; }
+.subheader-title { font-weight:700; font-size:14px; }
+.subheader-sub { font-size:11px; color:var(--muted); }
+
+/* CHAT SCREEN */
+.chat-screen { display:flex; flex-direction:column; height:100%; }
 </style>
 </head>
 <body>
-<div class="main-header">
-  <div class="header-top">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div class="logo-ring">
-        <img src="sk.png" alt="SK" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="lf" style="display:none">SK</div>
+<div class="app-shell">
+
+  <!-- ===== HEADER ===== -->
+  <header class="app-header">
+    <div class="header-left">
+      <button class="icon-btn" onclick="openSidebar()">
+        <svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="2" rx="1" fill="white"/><rect y="6" width="12" height="2" rx="1" fill="white"/><rect y="12" width="18" height="2" rx="1" fill="white"/></svg>
+      </button>
+      <div class="class-badge" onclick="openClassPicker()">
+        <span id="class-label">Class 10th</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="site-name-block">
-        <div class="sn">SK Education</div>
-        <div class="ss">Swami Vivekanand Study Point</div>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn notif-wrap" onclick="openNotif()">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        <div class="notif-badge" id="notif-dot"></div>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== SIDEBAR ===== -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <div class="sk-logo sm" id="sb-logo">SK</div>
+      <div>
+        <div class="sidebar-uname" id="sb-name">Student</div>
+        <div class="sidebar-uinfo" id="sb-info">Loading...</div>
       </div>
     </div>
-    <div style="margin-left:auto">
-      <button style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="openSide()">☰</button>
+    <nav class="sidebar-nav">
+      <div class="sidebar-item active" id="si-home" onclick="goScreen('home');closeSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Home
+      </div>
+      <div class="sidebar-item" onclick="goScreen('chat');closeSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        Chat / Doubt
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-item" onclick="openSettings();closeSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Settings
+      </div>
+      <div class="sidebar-item" onclick="doShare();closeSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+        Share App
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-item" style="color:#ef4444" onclick="doLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Logout
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ===== SCREENS ===== -->
+
+  <!-- HOME SCREEN -->
+  <main class="screen active scroll-area page-in" id="screen-home">
+    <!-- Banner -->
+    <div id="banner-wrap">
+      <img src="poster.png" class="home-banner" id="home-banner-img" onerror="this.style.display='none';document.getElementById('banner-fallback').style.display='flex'" alt="Banner">
+      <div class="home-banner-fallback" id="banner-fallback" style="display:none">
+        <div class="banner-inner">
+          <h2>🎯 DREAM 450+</h2>
+          <p>Bihar Board 10th New Batch 2027</p>
+          <p style="font-size:11px;margin-top:6px;opacity:.7">Math • Science • Social • Hindi • Sanskrit • English</p>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="header-greeting">
-    <div class="greet-hi">Namaskar 🙏</div>
-    <div class="greet-name" id="greet-name">Student</div>
-  </div>
-</div>
 
-<div class="slider-wrap" id="slider">
-  <div class="slide-default">
-    <div class="sdi">SK</div>
-    <div style="font-family:'Baloo 2',cursive;font-size:20px;font-weight:800">SK Education</div>
-    <div style="font-size:12px;opacity:.8">Swami Vivekanand Study Point</div>
-  </div>
-</div>
-
-<div class="sec-header"><div class="sec-title">📚 Study Materials</div></div>
-<div class="menu-grid">
-  <a class="mi" href="courses.html?f=free"><div class="free-dot">FREE</div><span class="mi-ico">📖</span><div class="mi-lbl">Free Courses</div></a>
-  <a class="mi" href="courses.html?f=paid"><span class="mi-ico">🎓</span><div class="mi-lbl">Paid Courses</div></a>
-  <a class="mi" href="courses.html?t=pdf&f=free"><div class="free-dot">FREE</div><span class="mi-ico">📝</span><div class="mi-lbl">Free Notes</div></a>
-  <a class="mi" href="courses.html?t=pdf&f=paid"><span class="mi-ico">📋</span><div class="mi-lbl">Paid Notes</div></a>
-  <a class="mi" href="courses.html?cat=NCERT"><span class="mi-ico">📚</span><div class="mi-lbl">NCERT Book</div></a>
-  <a class="mi" href="courses.html?cat=Math"><span class="mi-ico">➗</span><div class="mi-lbl">Math</div></a>
-  <a class="mi" href="courses.html?cat=Science"><span class="mi-ico">🔬</span><div class="mi-lbl">Science</div></a>
-  <a class="mi" href="courses.html?cat=Hindi"><span class="mi-ico">📜</span><div class="mi-lbl">Hindi</div></a>
-  <a class="mi" href="courses.html?cat=History"><span class="mi-ico">🏛️</span><div class="mi-lbl">History</div></a>
-</div>
-
-<div class="sec-header">
-  <div class="sec-title">🔥 Latest Courses</div>
-  <a class="sec-more" href="courses.html">Sab dekhein →</a>
-</div>
-<div id="courses-wrap">
-  <div class="loading-center"><div class="big-spinner"></div><span>Loading...</span></div>
-</div>
-
-<div class="bnav">
-  <a class="bnav-item active" href="dashboard.html"><span class="ni">🏠</span>Home</a>
-  <a class="bnav-item" href="courses.html"><span class="ni">🎓</span>Courses</a>
-  <a class="bnav-item" href="courses.html?t=pdf"><span class="ni">📄</span>Notes</a>
-  <a class="bnav-item" href="profile.html"><span class="ni">👤</span>Profile</a>
-</div>
-
-<!-- Side Menu -->
-<div class="side-overlay" id="side-overlay">
-  <div class="side-backdrop" onclick="closeSide()"></div>
-  <div class="side-panel">
-    <div class="side-head">
-      <div class="side-av" id="sm-av">S</div>
-      <div class="side-name" id="sm-name">Student</div>
-      <div class="side-email" id="sm-email"></div>
+    <div class="grid-3">
+      <div class="grid-card" onclick="openSection('paid-course')">
+        <div class="grid-icon" style="background:#dbeafe">📚</div>
+        <div class="grid-label">Paid Course</div>
+      </div>
+      <div class="grid-card" onclick="openSection('free-course')">
+        <div class="grid-icon" style="background:#dcfce7">🆓</div>
+        <div class="grid-label">Free Courses</div>
+      </div>
+      <div class="grid-card" onclick="openSection('ncert')">
+        <div class="grid-icon" style="background:#fef3c7">📖</div>
+        <div class="grid-label">NCERT Book</div>
+      </div>
+      <div class="grid-card" onclick="openSection('paid-test')">
+        <div class="grid-icon" style="background:#fce7f3">📝</div>
+        <div class="grid-label">Paid Test</div>
+      </div>
+      <div class="grid-card" onclick="openSection('paid-notes')">
+        <div class="grid-icon" style="background:#f3e8ff">📋</div>
+        <div class="grid-label">Paid Notes</div>
+      </div>
+      <div class="grid-card" onclick="openSection('free-notes')">
+        <div class="grid-icon" style="background:#d1fae5;position:relative">
+          📄<span style="position:absolute;top:-4px;right:-4px;background:#10b981;color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:8px">FREE</span>
+        </div>
+        <div class="grid-label">Free Notes</div>
+      </div>
+      <div class="grid-card" onclick="openSection('free-test')">
+        <div class="grid-icon" style="background:#fee2e2">✅</div>
+        <div class="grid-label">Free Test</div>
+      </div>
+      <div class="grid-card" onclick="openSection('timetable')">
+        <div class="grid-icon" style="background:#fef9c3">📅</div>
+        <div class="grid-label">Class Timetable</div>
+      </div>
+      <div class="grid-card" onclick="openSection('social')">
+        <div class="grid-icon" style="background:#e0e7ff">🔗</div>
+        <div class="grid-label">Social Links</div>
+      </div>
     </div>
-    <div class="side-nav">
-      <a class="sl" href="dashboard.html"><span class="si">🏠</span>Home</a>
-      <a class="sl" href="courses.html"><span class="si">🎓</span>Mere Courses</a>
-      <a class="sl" href="profile.html"><span class="si">👤</span>Mera Profile</a>
-      <div class="sl-div"></div>
-      <button class="sl red" onclick="doLogout()"><span class="si">🚪</span>Logout</button>
-    </div>
-  </div>
-</div>
+  </main>
 
-<!-- Course Modal -->
-<div class="modal-overlay" id="c-modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal-sheet" id="c-modal-body" style="max-height:90vh;overflow-y:auto"></div>
-</div>
-
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getDatabase,ref,get}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const FC={apiKey:"AIzaSyAXvrUDLT9JosL5eE4SsXqiuGP8rmS9RYk",authDomain:"education-bd8a9.firebaseapp.com",databaseURL:"https://education-bd8a9-default-rtdb.firebaseio.com",projectId:"education-bd8a9",storageBucket:"education-bd8a9.firebasestorage.app",messagingSenderId:"44581091231",appId:"1:44581091231:android:76d10f0d2597d3b64bafaa"};
-const app=initializeApp(FC),db=getDatabase(app);
-const saved=localStorage.getItem('sk_user');
-if(!saved){window.location.replace('index.html');}
-const user=JSON.parse(saved||'{}');
-document.getElementById('greet-name').textContent=user.name||'Student';
-document.getElementById('sm-name').textContent=user.name||'Student';
-document.getElementById('sm-email').textContent=user.email||'';
-document.getElementById('sm-av').textContent=(user.name||'S').charAt(0).toUpperCase();
-window.openSide=()=>document.getElementById('side-overlay').classList.add('open');
-window.closeSide=()=>document.getElementById('side-overlay').classList.remove('open');
-window.doLogout=()=>{if(confirm('Logout karna chahte hain?')){localStorage.removeItem('sk_user');window.location.replace('index.html');}};
-window.closeModal=()=>document.getElementById('c-modal').classList.remove('open');
-let allItems=[];
-function getYTId(url){try{if(!url)return '';if(url.includes('v='))return url.split('v=')[1].split('&')[0];if(url.includes('youtu.be/'))return url.split('youtu.be/')[1].split('?')[0];if(url.includes('embed/'))return url.split('embed/')[1].split('?')[0];return url.split('/').pop().split('?')[0];}catch{return '';}}
-async function loadSlider(){
-  try{
-    const snap=await get(ref(db,'slider'));
-    if(!snap.exists())return;
-    const items=Object.values(snap.val());
-    if(!items.length)return;
-    const sl=document.getElementById('slider');
-    sl.innerHTML=items.map((s,i)=>`<img class="slide${i===0?' active':''}" src="${s.url||s}" alt="">`).join('')
-      +`<div class="slider-dots">`+items.map((_,i)=>`<div class="sdot${i===0?' active':''}" onclick="gS(${i})"></div>`).join('')+`</div>`;
-    let cur=0;
-    window.gS=n=>{document.querySelectorAll('.slide').forEach((el,i)=>el.classList.toggle('active',i===n));document.querySelectorAll('.sdot').forEach((el,i)=>el.classList.toggle('active',i===n));cur=n;};
-    if(items.length>1)setInterval(()=>{cur=(cur+1)%items.length;window.gS(cur);},3800);
-  }catch(e){}
-}
-async function loadCourses(){
-  try{
-    const snap=await get(ref(db,'courses'));
-    const wrap=document.getElementById('courses-wrap');
-    if(!snap.exists()){wrap.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-sub">Koi course abhi nahi hai</div></div>';return;}
-    allItems=Object.entries(snap.val()).filter(([_,c])=>c.contentType==='video'||c.contentType==='pdf').reverse();
-    if(!allItems.length){wrap.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-sub">Koi content abhi nahi hai</div></div>';return;}
-    wrap.innerHTML='<div class="h-scroll">'+allItems.slice(0,15).map(([id,c])=>{
-      const poster=c.posterUrl||c.thumbnail||'';
-      return `<div class="c-card" onclick="openC('${id}')">
-        ${poster?`<img class="c-thumb" src="${poster}" alt="${c.title||''}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
-        <div class="c-fall" ${poster?'style="display:none"':''}>📚</div>
-        <div class="c-body">
-          <div class="c-cat">${c.category||''}${c.subcategory?' · '+c.subcategory:''}</div>
-          <div class="c-title">${c.title||'Course'}</div>
-          <div style="display:flex;gap:4px;flex-wrap:wrap">
-            <span class="chip chip-${c.isFree?'free':'paid'}">${c.isFree?'Free':'Paid'}</span>
-            <span class="chip chip-${c.contentType}">${c.contentType==='video'?'🎥':'📄'}</span>
+  <!-- MY COURSES SCREEN -->
+  <main class="screen scroll-area page-in" id="screen-courses">
+    <div class="sec-title">My Courses</div>
+    <div id="my-courses-list">
+      <div class="course-card" onclick="openCourse()">
+        <img src="sima.png" class="course-banner" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Course">
+        <div class="course-banner-fallback" style="display:none">
+          <div style="text-align:center">
+            <div style="font-size:13px;opacity:.7">Bihar Board</div>
+            <div style="font-size:30px;font-weight:900;font-family:'Baloo 2',sans-serif">DREAM 465+</div>
+            <div style="font-size:11px;margin-top:4px;opacity:.8">4 in 1 Complete Course 2027</div>
           </div>
         </div>
-        <button class="open-btn-sm">Dekhein</button>
-      </div>`;
-    }).join('')+'</div>';
-  }catch(e){}
+        <div class="course-info">
+          <div class="course-name">Dream 465+ — Complete 10th Batch 2027</div>
+          <div class="course-valid">Expiry: 31 Dec 2027</div>
+          <button class="view-btn">View Course →</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- COURSE DETAIL SCREEN -->
+  <main class="screen page-in" id="screen-course-detail" style="flex-direction:column">
+    <div class="back-header">
+      <button class="back-btn" onclick="goScreen('courses')">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="subheader-logo sk-logo sm" id="cd-logo">SK</div>
+      <div>
+        <div class="subheader-title" style="color:#fff">Dream 465+ Course</div>
+      </div>
+    </div>
+    <div class="content-tabs" style="flex-shrink:0">
+      <div class="ctab active" id="ctab-pdf" onclick="switchTab('pdf')">📄 Content (PDF)</div>
+      <div class="ctab" id="ctab-video" onclick="switchTab('video')">🎬 Video</div>
+    </div>
+    <div class="scroll-area" id="course-content-list" style="flex:1">
+      <div class="empty-state"><div class="emoji">⏳</div><h3>Loading...</h3></div>
+    </div>
+  </main>
+
+  <!-- SECTION SCREEN (NCERT, Notes, etc.) -->
+  <main class="screen page-in" id="screen-section" style="flex-direction:column">
+    <div class="back-header">
+      <button class="back-btn" onclick="goScreen('home')">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <div>
+        <div class="subheader-title" style="color:#fff" id="section-title">Section</div>
+      </div>
+    </div>
+    <div class="scroll-area" id="section-content" style="flex:1">
+      <div class="empty-state"><div class="emoji">📂</div><h3>No Content Available</h3><p>We couldn't find any matching results</p></div>
+    </div>
+  </main>
+
+  <!-- CHAT SCREEN -->
+  <main class="screen page-in" id="screen-chat" style="flex-direction:column">
+    <div class="back-header">
+      <button class="back-btn" onclick="goScreen('home')">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <div>
+        <div class="subheader-title" style="color:#fff">💬 Chat / Doubt</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.7)">Ask anything to admin</div>
+      </div>
+    </div>
+    <div class="chat-msgs" id="chat-msgs"></div>
+    <div class="chat-bar">
+      <input class="chat-input-field" id="chat-input" placeholder="Type your doubt..." onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="send-btn" onclick="sendMsg()">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+      </button>
+    </div>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-tab active" id="nt-home" onclick="goScreen('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Home
+    </button>
+    <button class="nav-tab" id="nt-courses" onclick="goScreen('courses')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+      My Courses
+    </button>
+    <button class="nav-tab" id="nt-downloads" onclick="showToast('Downloads coming soon!')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      Downloads
+    </button>
+    <button class="nav-tab" id="nt-chat" onclick="goScreen('chat')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+      Chat
+    </button>
+    <button class="nav-tab" onclick="goScreen('chat')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Doubt AI
+    </button>
+  </nav>
+</div>
+
+<!-- NOTIFICATIONS MODAL -->
+<div class="modal-bg" id="notif-modal" onclick="closeNotif()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🔔 Notifications</div>
+    <div id="notif-list"><div class="empty-state" style="padding:20px 0"><div class="emoji" style="font-size:36px">📭</div><h3 style="font-size:14px">No notifications yet</h3></div></div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-bg" id="settings-modal" onclick="closeSettings()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">⚙️ Settings</div>
+    <div class="settings-row">
+      <div>
+        <div style="font-weight:600;font-size:14px">Dark Theme</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Switch to dark mode</div>
+      </div>
+      <button class="toggle" id="theme-tog" onclick="toggleTheme()"></button>
+    </div>
+  </div>
+</div>
+
+<!-- CLASS PICKER MODAL -->
+<div class="modal-bg" id="class-modal" onclick="closeClassPicker()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📚 Select Class</div>
+    <div id="class-options">
+      <div onclick="setClass(10)" class="settings-row" style="cursor:pointer;margin-bottom:8px"><span style="font-weight:600">Class 10th (Bihar Board)</span><span style="font-size:18px">🎯</span></div>
+      <div onclick="setClass(9)" class="settings-row" style="cursor:pointer;margin-bottom:8px"><span style="font-weight:600">Class 9th</span><span style="font-size:18px">📖</span></div>
+      <div onclick="setClass(8)" class="settings-row" style="cursor:pointer"><span style="font-weight:600">Class 8th</span><span style="font-size:18px">✏️</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap"><div class="toast" id="sk-toast"></div></div>
+
+<script src="shared.js"></script>
+<script>
+// ===== AUTH CHECK =====
+let currentUser = null;
+window.addEventListener('DOMContentLoaded', () => {
+  currentUser = getUser();
+  if (!currentUser || currentUser.isAdmin) { window.location.href = 'signup.html'; return; }
+  applyTheme();
+  initApp();
+  loadLogo(document.getElementById('sb-logo'));
+  loadLogo(document.getElementById('cd-logo'));
+  checkNotifs();
+  // fix theme toggle
+  const th = localStorage.getItem('sk_theme');
+  if (th === 'dark') document.getElementById('theme-tog').classList.add('on');
+});
+
+function initApp() {
+  document.getElementById('sb-name').textContent = currentUser.name;
+  document.getElementById('sb-info').textContent = currentUser.phone + ' • Class ' + (currentUser.class||'10') + 'th';
+  document.getElementById('class-label').textContent = 'Class ' + (currentUser.class||'10') + 'th';
 }
-window.openC=(id)=>{
-  const found=allItems.find(([i])=>i===id);if(!found)return;
-  const c=found[1];
-  let html=`<button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-title">${c.title||'Course'}</div>
-    <div class="modal-sub">${c.category||''}${c.subcategory?' → '+c.subcategory:''} • ${c.isFree?'🆓 Free':'💰 Paid'}</div>`;
-  if(c.contentType==='video'&&c.youtubeLink){
-    const vid=getYTId(c.youtubeLink);
-    if(vid)html+=`<iframe class="yt-frame" src="https://www.youtube.com/embed/${vid}" allow="autoplay;encrypted-media" allowfullscreen></iframe>`;
-    else html+=`<a class="pdf-open-btn" href="${c.youtubeLink}" target="_blank"><span style="font-size:28px">🎥</span><div><div>Video dekhein</div></div><span style="margin-left:auto">→</span></a>`;
-  }else if(c.pdfUrl){
-    html+=`<a class="pdf-open-btn" href="${c.pdfUrl}" target="_blank" rel="noopener noreferrer">
-      <span style="font-size:32px">📄</span>
-      <div><div style="font-weight:700;font-size:15px">${c.title||'PDF'}</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Tap karo → PDF/Notes khulegा</div></div>
-      <span style="margin-left:auto;font-size:22px;color:var(--acc)">→</span></a>`;
+
+// ===== SCREEN NAVIGATION =====
+const screens = ['home','courses','course-detail','section','chat'];
+function goScreen(name) {
+  screens.forEach(s => {
+    const el = document.getElementById('screen-'+s);
+    if (el) el.classList.toggle('active', s === name);
+  });
+  // bottom nav
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const navMap = { home:'nt-home', courses:'nt-courses', chat:'nt-chat' };
+  if (navMap[name]) document.getElementById(navMap[name]).classList.add('active');
+  // sidebar active
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  if (name === 'home') document.getElementById('si-home')?.classList.add('active');
+  // special
+  if (name === 'chat') loadChat();
+}
+
+// ===== COURSE =====
+let currentTab = 'pdf';
+function openCourse() { goScreen('course-detail'); loadContent('pdf'); }
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('ctab-pdf').classList.toggle('active', tab==='pdf');
+  document.getElementById('ctab-video').classList.toggle('active', tab==='video');
+  loadContent(tab);
+}
+
+async function loadContent(tab) {
+  const container = document.getElementById('course-content-list');
+  container.innerHTML = '<div class="empty-state"><div class="emoji">⏳</div><h3>Loading...</h3></div>';
+  const data = await fbGet(`course_content/dream465/${tab}`);
+  if (!data || Object.keys(data).length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="emoji">🔍</div><h3>No Content Available</h3><p>We couldn't find any matching results</p></div>`;
+    return;
   }
-  if(c.description)html+=`<div style="font-size:13px;color:#555;line-height:1.7;margin-top:10px">${c.description}</div>`;
-  document.getElementById('c-modal-body').innerHTML=html;
-  document.getElementById('c-modal').classList.add('open');
+  const items = Object.values(data).sort((a,b)=>(a.ts||0)-(b.ts||0));
+  container.innerHTML = items.map((item, i) => `
+    <div class="lesson-item" onclick="${tab==='pdf' ? `openPDF('${item.url}')` : `openVideo('${item.url}')`}">
+      <div class="lesson-num-box">${tab==='pdf'?'📄':i+1}</div>
+      <div class="lesson-info">
+        <div class="lesson-title">${item.title}</div>
+        <div class="lesson-sub">${item.subject||''} ${item.subcategory?'• '+item.subcategory:''}</div>
+      </div>
+      ${tab==='video'
+        ? `<button class="watch-btn">▶ Watch</button>`
+        : `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`}
+    </div>`).join('');
+}
+
+function openPDF(url) { if(url) window.open(url,'_blank'); }
+function openVideo(url) { if(url) window.open(url,'_blank'); }
+
+// ===== SECTION SCREENS =====
+const sectionMeta = {
+  'paid-course': { title:'💳 Paid Courses', key:'paid_courses' },
+  'free-course': { title:'🆓 Free Courses', key:'free_courses' },
+  'ncert': { title:'📖 NCERT Books', key:'ncert' },
+  'paid-test': { title:'📝 Paid Tests', key:'paid_tests' },
+  'paid-notes': { title:'📋 Paid Notes', key:'paid_notes' },
+  'free-notes': { title:'📄 Free Notes', key:'free_notes' },
+  'free-test': { title:'✅ Free Tests', key:'free_tests' },
+  'timetable': { title:'📅 Class Timetable', key:'timetable' },
+  'social': { title:'🔗 Social Links', key:null },
 };
-loadSlider();loadCourses();
+
+async function openSection(key) {
+  const meta = sectionMeta[key];
+  document.getElementById('section-title').textContent = meta.title;
+  goScreen('section');
+
+  if (key === 'social') {
+    document.getElementById('section-content').innerHTML = `
+      <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+        <a href="https://youtube.com" target="_blank" class="settings-row" style="text-decoration:none;gap:12px">
+          <span style="font-size:24px">▶️</span><span style="font-weight:600">YouTube Channel</span>
+          <span style="margin-left:auto;color:var(--muted)">→</span></a>
+        <a href="https://t.me" target="_blank" class="settings-row" style="text-decoration:none;gap:12px">
+          <span style="font-size:24px">✈️</span><span style="font-weight:600">Telegram Group</span>
+          <span style="margin-left:auto;color:var(--muted)">→</span></a>
+        <a href="https://instagram.com" target="_blank" class="settings-row" style="text-decoration:none;gap:12px">
+          <span style="font-size:24px">📸</span><span style="font-weight:600">Instagram</span>
+          <span style="margin-left:auto;color:var(--muted)">→</span></a>
+        <a href="https://facebook.com" target="_blank" class="settings-row" style="text-decoration:none;gap:12px">
+          <span style="font-size:24px">📘</span><span style="font-weight:600">Facebook Page</span>
+          <span style="margin-left:auto;color:var(--muted)">→</span></a>
+        <div class="settings-row" style="gap:12px">
+          <span style="font-size:24px">📞</span>
+          <div><div style="font-weight:600">Contact Us</div><div style="font-size:12px;color:var(--muted)">+91 7700870453</div></div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const container = document.getElementById('section-content');
+  container.innerHTML = '<div class="empty-state"><div class="emoji">⏳</div><h3>Loading...</h3></div>';
+  const data = await fbGet(meta.key);
+  if (!data || Object.keys(data).length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="emoji">📂</div><h3>No Content Available</h3><p>We couldn't find any matching results</p></div>`;
+    return;
+  }
+  const items = Object.values(data);
+  container.innerHTML = items.map(item => `
+    <div class="lesson-item" onclick="openPDF('${item.url}')">
+      <div class="lesson-num-box">📄</div>
+      <div class="lesson-info">
+        <div class="lesson-title">${item.title}</div>
+        <div class="lesson-sub">${item.subject||''} ${item.subcategory?'• '+item.subcategory:''}</div>
+      </div>
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+    </div>`).join('');
+}
+
+// ===== CHAT =====
+async function loadChat() {
+  const c = document.getElementById('chat-msgs');
+  c.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Loading messages...</div>';
+  const data = await fbGet('chats');
+  if (!data) {
+    c.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:13px">No messages yet. Ask your doubt! 💬</div>';
+    return;
+  }
+  const msgs = Object.values(data)
+    .filter(m => m.userId === currentUser.uid || m.userId === currentUser.uid)
+    .sort((a,b)=>a.ts-b.ts);
+  c.innerHTML = msgs.length ? msgs.map(m => `
+    <div class="msg-row ${m.role==='user'?'mine':'theirs'}">
+      <div class="bubble ${m.role==='user'?'mine':'theirs'}">${m.text}</div>
+      <div class="msg-time">${m.role==='admin'?'Admin • ':''}${new Date(m.ts).toLocaleTimeString('hi-IN',{hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`).join('')
+    : '<div style="text-align:center;padding:40px;color:var(--muted);font-size:13px">No messages yet. Ask your doubt! 💬</div>';
+  c.scrollTop = c.scrollHeight;
+}
+
+async function sendMsg() {
+  const inp = document.getElementById('chat-input');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  await fbPush('chats', { text, role:'user', userId: currentUser.uid, userName: currentUser.name, ts: Date.now() });
+  loadChat();
+  showToast('Doubt sent! Admin will reply soon 📨');
+}
+
+// ===== NOTIFICATIONS =====
+async function checkNotifs() {
+  const data = await fbGet('notifications');
+  if (data && Object.keys(data).length > 0) document.getElementById('notif-dot').style.display = 'block';
+}
+async function openNotif() {
+  document.getElementById('notif-modal').classList.add('open');
+  const data = await fbGet('notifications');
+  const list = document.getElementById('notif-list');
+  document.getElementById('notif-dot').style.display = 'none';
+  if (!data) { list.innerHTML = '<div class="empty-state" style="padding:20px 0"><div class="emoji" style="font-size:36px">📭</div><h3 style="font-size:14px">No notifications yet</h3></div>'; return; }
+  list.innerHTML = Object.values(data).reverse().map(n => `
+    <div class="notif-item">
+      <div class="notif-item-title">${n.title}</div>
+      <div class="notif-item-body">${n.body}</div>
+      <div class="notif-item-date">${new Date(n.ts).toLocaleString('en-IN')}</div>
+    </div>`).join('');
+}
+function closeNotif() { document.getElementById('notif-modal').classList.remove('open'); }
+
+// ===== SETTINGS =====
+function openSettings() { document.getElementById('settings-modal').classList.add('open'); }
+function closeSettings() { document.getElementById('settings-modal').classList.remove('open'); }
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark?'light':'dark');
+  localStorage.setItem('sk_theme', isDark?'light':'dark');
+  document.getElementById('theme-tog').classList.toggle('on', !isDark);
+}
+
+// ===== CLASS PICKER =====
+function openClassPicker() { document.getElementById('class-modal').classList.add('open'); }
+function closeClassPicker() { document.getElementById('class-modal').classList.remove('open'); }
+function setClass(n) {
+  currentUser.class = String(n);
+  setUser(currentUser);
+  document.getElementById('class-label').textContent = 'Class ' + n + 'th';
+  closeClassPicker();
+  showToast('Switched to Class ' + n + 'th');
+}
+
+// ===== MISC =====
+function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.add('open'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('open'); }
+function doShare() { if(navigator.share) navigator.share({title:'SK Education',url:location.href}); else { navigator.clipboard?.writeText(location.href); showToast('Link copied!'); } }
+function doLogout() { clearUser(); window.location.href = 'login.html'; }
 </script>
 </body>
 </html>
